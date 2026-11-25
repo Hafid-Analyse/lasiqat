@@ -22,227 +22,201 @@
 </script>
 <style>
 :root{
-  --bg:#FAF5EA; --card:#FFFDF7; --card-2:#FBF6EC; --line:#EADFC8;
-  --green:#1E5B43; --green-2:#26704F; --green-d:#0F3D2C; --green-l:#E2EEE6; --green-ink:#174A36;
-  --gold:#C9A04E; --gold-hi:#E6C579; --gold-l:#F5EAD0; --gold-ink:#7A5A1E;
-  --ink:#2E261D; --muted:#85776A;
-  --brick:#B04A35; --brick-l:#F8E2DA;
+  --bg:#F7F3EA; --card:#FFFFFF; --soft:#F8F4EC; --line:#E8DFCC;
+  --green:#1E5B43; --green-2:#26704F; --green-l:#E4EFE8; --green-ink:#174A36;
+  --gold:#C9A04E; --gold-hi:#E6C579;
+  --ink:#2A241C; --muted:#857869;
+  --red:#B04A35; --red-l:#F8E4DD;
   --head-a:#2A7A56; --head-b:#1E5B43; --head-c:#0E3527;
-  --on-head:#FFF8E8; --on-head-2:#CFE3D6;
-  --shadow:0 10px 24px -16px rgba(46,38,29,.45);
-  --r-xl:30px; --r-lg:22px; --r-md:14px;
+  --shadow:0 1px 2px rgba(42,36,28,.06),0 6px 18px -12px rgba(42,36,28,.25);
   --safe-b:env(safe-area-inset-bottom,0px);
-  --nav-w:0px;
 }
 [data-theme="dark"]{
-  --bg:#0D1814; --card:#14231C; --card-2:#182A22; --line:#24392F;
-  --green:#2E8462; --green-2:#36946E; --green-d:#0A2A1E; --green-l:#1A3529; --green-ink:#BFE3CF;
-  --gold:#D8B25F; --gold-hi:#F0CF83; --gold-l:#332A18; --gold-ink:#F0CF83;
-  --ink:#ECE5D5; --muted:#9AA79F;
-  --brick:#E27C64; --brick-l:#3A211B;
+  --bg:#0E1814; --card:#15221C; --soft:#1A2A23; --line:#26392F;
+  --green:#2E8462; --green-2:#36946E; --green-l:#1C3529; --green-ink:#BFE3CF;
+  --gold:#D8B25F; --gold-hi:#F0CF83;
+  --ink:#ECE6D8; --muted:#97A49C;
+  --red:#E27C64; --red-l:#3A221C;
   --head-a:#1C5A41; --head-b:#123E2E; --head-c:#06180F;
-  --on-head:#FFF4DC; --on-head-2:#A9C9B7;
-  --shadow:0 10px 24px -14px rgba(0,0,0,.7);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 20px -14px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-size:16px;line-height:1.55;transition:background .25s}
-button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer;border:0;background:none}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+button:disabled{opacity:.35;cursor:default}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
 .hidden{display:none!important}
+svg{display:block}
 
 /* ── الرأس ── */
-.head{position:relative;color:var(--on-head);padding:16px 20px 64px;
-  background:
-    radial-gradient(120% 90% at 85% 0%, rgba(230,197,121,.22), transparent 55%),
-    radial-gradient(90% 70% at 0% 100%, rgba(0,0,0,.25), transparent 60%),
-    linear-gradient(165deg,var(--head-a) 0%,var(--head-b) 48%,var(--head-c) 100%);
-  overflow:hidden;isolation:isolate}
-.head::before{content:"";position:absolute;inset:0;background-image:var(--motif);background-size:120px 120px;opacity:.16;z-index:-1;
-  -webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 95%);mask-image:linear-gradient(180deg,#000 30%,transparent 95%)}
-.waves{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:58px;display:block;z-index:1}
-.waves .w1{fill:rgba(230,197,121,.18)}
-.waves .w2{fill:none;stroke:url(#mg);stroke-width:2;opacity:.95}
-.waves .w3{fill:var(--bg);transition:fill .25s}
-.head-top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:2}
-.brand{font-family:Amiri,serif;font-weight:700;font-size:30px;line-height:1.05;
-  background:linear-gradient(180deg,#FFF3CF 0%,#E8C676 32%,#B8862E 52%,#F2D58E 72%,#C9A04E 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.brand-sub{display:block;font-size:13px;color:var(--on-head-2);margin-top:2px}
-.head-actions{display:flex;gap:8px;align-items:center}
-.icon-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--gold-hi);
-  background:rgba(255,255,255,.07);border:1px solid rgba(230,197,121,.55);box-shadow:inset 0 0 0 3px rgba(255,255,255,.03)}
-.icon-btn svg{width:20px;height:20px}
-.install-chip{height:42px;border-radius:999px;padding:0 14px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;
-  color:#0F3D2C;background:linear-gradient(180deg,#F0D59A,#C9A04E);border:1px solid rgba(255,255,255,.45);box-shadow:0 6px 14px -8px rgba(0,0,0,.6)}
-.install-chip svg{width:18px;height:18px}
-.head-body{position:relative;margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:2}
-.head-title{font-family:Amiri,serif;font-size:26px;line-height:1.2}
-.head-sub{font-size:14px;color:var(--on-head-2)}
-.ring{position:relative;width:80px;height:80px;flex:none}
-.ring svg{width:80px;height:80px;transform:rotate(-90deg)}
-.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-size:12px;line-height:1.15;color:var(--on-head-2)}
-.ring .lbl b{display:block;font-size:19px;color:var(--gold-hi)}
+.head{position:relative;color:#FFF8E8;padding:12px 16px 30px;overflow:hidden;
+  background:radial-gradient(100% 120% at 90% 0%,rgba(230,197,121,.2),transparent 60%),linear-gradient(165deg,var(--head-a),var(--head-b) 50%,var(--head-c))}
+.head::before{content:"";position:absolute;inset:0;background-image:var(--motif);background-size:110px;opacity:.12}
+.head-in{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1180px;margin:0 auto}
+.brand{font-family:Amiri,serif;font-weight:700;font-size:26px;line-height:1.1;
+  background:linear-gradient(180deg,#FFF3CF,#E8C676 40%,#B8862E 60%,#F2D58E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head-actions{display:flex;gap:8px}
+.hbtn{height:36px;min-width:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;color:#F0D59A;
+  background:rgba(255,255,255,.08);border:1px solid rgba(230,197,121,.35);font-size:13px;font-weight:600}
+.hbtn svg{width:18px;height:18px}
+.waves{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:24px;z-index:1}
+.waves .w1{fill:none;stroke:var(--gold);stroke-width:1.5;opacity:.7}
+.waves .w2{fill:var(--bg)}
 
 /* ── التخطيط ── */
-.layout{min-height:100vh}
-main{padding:4px 14px calc(108px + var(--safe-b));max-width:1180px;margin:0 auto}
-.panel{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:16px;margin-bottom:12px;border:1px solid var(--line)}
-.notice{border-radius:var(--r-md);padding:10px 14px;margin:8px 0 12px;font-size:14px}
-.notice.warn{background:var(--brick-l);color:var(--brick);border:1px solid color-mix(in srgb,var(--brick) 30%,transparent)}
-.notice.info{background:var(--gold-l);color:var(--gold-ink);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
-.notice.ok{background:var(--green-l);color:var(--green-ink);border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
-.section-h{display:flex;align-items:center;justify-content:space-between;margin:14px 4px 10px;gap:10px}
-.section-h h2{margin:0;font-family:Amiri,serif;font-size:23px;font-weight:700;color:var(--green-ink)}
-[data-theme="light"] .section-h h2{color:var(--green-d)}
-.empty{text-align:center;color:var(--muted);padding:22px 10px}
-.cards{display:grid;gap:12px}
-.hint{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+main{padding:6px 14px calc(92px + var(--safe-b));max-width:1180px;margin:0 auto}
+.page-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 2px 12px}
+.page-h h2{margin:0;font-family:Amiri,serif;font-size:22px;font-weight:700;color:var(--green-ink)}
+[data-theme="light"] .page-h h2{color:var(--green)}
+.sub-h{display:flex;align-items:center;justify-content:space-between;margin:18px 2px 8px}
+.sub-h h3{margin:0;font-size:15px;font-weight:600;color:var(--muted)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:6px 14px;margin-bottom:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .lbl{flex:1;min-width:0}
+.row .lbl b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .lbl small{display:block;font-size:12.5px;color:var(--muted)}
+.meta{font-size:13px;color:var(--muted);padding:2px 2px 0}
+.empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px}
+
+/* ── الأزرار: ثلاثة أحجام فقط ── */
+.btn{height:46px;padding:0 18px;border-radius:12px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.btn.block{display:flex;width:100%}
+.btn.primary{background:var(--green);color:#fff;box-shadow:0 6px 14px -10px rgba(15,61,44,.9)}
+.btn.primary:active{background:var(--green-2)}
+.btn.outline{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:var(--red);color:#fff}
+.btn.sm{height:34px;padding:0 12px;font-size:13.5px;border-radius:10px}
+.btn svg{width:17px;height:17px}
+.ibtn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--muted);border:1px solid var(--line);background:var(--card);flex:none}
+.ibtn svg{width:17px;height:17px}
+.ibtn.danger{color:var(--red)}
+.ibtn.on{background:var(--green);color:#fff;border-color:var(--green)}
+.btns{display:flex;gap:8px;align-items:center}
+
+/* ── الحقول ── */
+.stp{display:inline-flex;align-items:center;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--soft);flex:none;overflow:hidden}
+.stp button{width:32px;height:100%;font-size:18px;color:var(--green-ink);display:grid;place-items:center}
+[data-theme="light"] .stp button{color:var(--green)}
+.stp button:active{background:var(--line)}
+.stp input{width:46px;height:100%;border:0;border-inline:1px solid var(--line);background:var(--card);text-align:center;font-weight:600;font-size:15px;padding:0}
+.stp input:focus{outline:none;background:var(--soft)}
+select.sel,input.inp{height:42px;width:100%;border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:0 12px;font-size:15px}
+select.sel:focus,input.inp:focus{outline:none;border-color:var(--gold)}
+.row select.sel{width:auto;max-width:62%;height:36px}
+.field{margin-bottom:12px}
+.field>label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.seg{display:flex;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:2px;gap:2px}
+.seg button{flex:1;height:32px;border-radius:8px;font-size:13.5px;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--green-ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+[data-theme="light"] .seg button.on{color:var(--green)}
+.switch input{width:42px;height:24px;appearance:none;-webkit-appearance:none;background:var(--line);border-radius:999px;position:relative;cursor:pointer;flex:none;margin:0;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:right .2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.switch input:checked{background:var(--green)}
+.switch input:checked::after{right:21px}
+.grid2{display:grid;grid-template-columns:1fr;gap:0 18px}
+@media (min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+.grid2 .row{min-height:48px}
+details.help{font-size:13px;color:var(--muted);margin-top:6px}
+details.help summary{cursor:pointer;padding:6px 0;color:var(--green-ink)}
+[data-theme="light"] details.help summary{color:var(--green)}
+details.help ol{margin:4px 0 0;padding-inline-start:18px}
+.note{font-size:13px;border-radius:10px;padding:8px 12px;margin:0 0 12px}
+.note.ok{background:var(--green-l);color:var(--green-ink)}
+.note.warn{background:var(--red-l);color:var(--red)}
 
 /* ── البطاقات ── */
-.wcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow)}
-.wtop{display:flex;align-items:center;gap:12px}
-.wname{flex:1;min-width:0}
-.wname b{display:block;font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wname span{font-size:13px;color:var(--muted)}
-.wbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.thumb{flex:none;position:relative;background:#fff;border-radius:6px;box-shadow:0 0 0 1px var(--line),0 6px 12px -10px rgba(0,0,0,.5);overflow:hidden}
-
-/* ── الأزرار ── */
-.btn-main{display:block;width:100%;border-radius:999px;color:#FFF8E8;padding:14px 18px;font-weight:600;font-size:17px;
-  background:linear-gradient(180deg,var(--green-2),var(--green) 55%,var(--green-d));border:1px solid var(--gold);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.1),inset 0 1px 0 rgba(255,255,255,.25),0 10px 20px -12px rgba(15,61,44,.9)}
-.btn-main:active{filter:brightness(.92)}
-.btn-main[disabled]{opacity:.55}
-.btn-ghost{display:block;width:100%;border-radius:999px;color:var(--gold-ink);padding:12px 18px;font-weight:600;background:var(--card);
-  border:1.5px solid var(--gold);box-shadow:inset 0 0 0 3px var(--card),inset 0 0 0 4px color-mix(in srgb,var(--gold) 35%,transparent)}
-.btn-danger{display:block;width:100%;border-radius:999px;color:#fff;padding:13px 18px;font-weight:600;
-  background:linear-gradient(180deg,color-mix(in srgb,var(--brick) 85%,#fff),var(--brick));border:1px solid color-mix(in srgb,var(--brick) 60%,#000)}
-.btn-small{border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;background:var(--green-l);color:var(--green-ink);border:1px solid color-mix(in srgb,var(--green) 35%,transparent);white-space:nowrap}
-.btn-small.gold{background:var(--gold-l);color:var(--gold-ink);border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
-.btn-small.red{background:var(--brick-l);color:var(--brick);border-color:color-mix(in srgb,var(--brick) 35%,transparent)}
-.actions{display:grid;gap:10px;margin-top:16px}
-.step{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:20px;line-height:1;color:var(--green-ink);flex:none;
-  background:var(--card);border:1px solid color-mix(in srgb,var(--gold) 55%,var(--line))}
-[data-theme="light"] .step{color:var(--green)}
-.step:active{background:var(--gold-l)}
-
-/* ── التنقل ── */
-nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 6px calc(6px + var(--safe-b))}
-nav.tabs .nav-brand{display:none}
-nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--muted);padding:6px 0;border-radius:14px}
-nav.tabs svg{width:23px;height:23px;stroke-width:1.6}
-nav.tabs button.on{color:var(--green-ink);font-weight:600}
-[data-theme="light"] nav.tabs button.on{color:var(--green-d)}
-nav.tabs button.on svg{color:var(--gold)}
-
-/* ── القوائم والحقول ── */
-.prow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-.prow:last-child{border-bottom:0}
-.prow .grow{flex:1;min-width:0}
-.prow b{font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prow small{display:block;color:var(--muted);font-size:13px}
-.qty{display:flex;align-items:center;gap:5px;flex:none}
-.qty input{width:58px;text-align:center;border:1px solid var(--line);border-radius:12px;padding:6px 2px;font-size:17px;font-weight:700;background:var(--card-2)}
-.qty.sm input{width:48px;font-size:15px;padding:5px 2px}
-.qty.sm .step{width:32px;height:32px;font-size:18px}
-.tag{font-size:12px;border-radius:999px;padding:2px 10px;background:var(--green-l);color:var(--green-ink);white-space:nowrap}
-.tag.gold{background:var(--gold-l);color:var(--gold-ink)}
-.x-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--brick);flex:none}
-.x-btn svg{width:18px;height:18px}
-
-.field{margin-bottom:12px}
-.field label{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
-.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--card-2);border-radius:var(--r-md);padding:11px 13px;font-size:16px}
-.field input:focus,.field select:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 25%,transparent)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.seg{display:flex;background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:3px}
-.seg button{flex:1;border-radius:999px;padding:8px 6px;font-size:15px;color:var(--muted)}
-.seg button.on{background:linear-gradient(180deg,var(--green-2),var(--green));color:#fff;font-weight:600;box-shadow:inset 0 0 0 1px var(--gold)}
-.switch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;cursor:pointer}
-.switch small{display:block;color:var(--muted);font-size:13px}
-.switch input{width:48px;height:28px;appearance:none;-webkit-appearance:none;background:var(--line);border-radius:999px;position:relative;transition:background .2s;cursor:pointer;flex:none;margin:0}
-.switch input::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:right .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.switch input:checked{background:var(--green)}
-.switch input:checked::after{right:23px}
-.guide{font-size:13px;color:var(--muted);margin:0;padding-inline-start:18px}
-.guide li{margin-bottom:2px}
+.cards{display:grid;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:12px;display:flex;align-items:center;gap:12px}
+.card .info{flex:1;min-width:0}
+.card .info b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .info small{display:block;font-size:12.5px;color:var(--muted)}
+.card .btns{margin-top:8px}
+.thumb{flex:none;position:relative;background:#fff;border-radius:4px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.pick{width:100%;text-align:start}
 
 /* ── سطور المحتوى ── */
-.lrow{background:var(--card-2);border:1px solid var(--line);border-radius:var(--r-md);padding:8px;margin-bottom:8px}
-.lrow .lt{width:100%;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 11px;font-size:16px}
-.lrow .lt:focus{border-color:var(--gold);outline:none}
-.lctl{display:flex;align-items:center;gap:5px;margin-top:6px;flex-wrap:wrap}
-.lctl select{flex:1 1 100px;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 8px;font-size:15px}
-.b-btn{width:36px;height:36px;border-radius:10px;font-weight:800;font-size:17px;border:1px solid var(--line);background:var(--card);color:var(--muted);flex:none}
-.b-btn.on{background:linear-gradient(180deg,var(--green-2),var(--green));color:#fff;border-color:var(--gold)}
+.lrow{border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px;background:var(--soft)}
+.lrow .inp{background:var(--card);height:40px}
+.lctl{display:flex;align-items:center;gap:6px;margin-top:6px}
+.lctl select{flex:1;min-width:0;height:34px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 8px;font-size:13.5px}
+.b-btn{font-weight:800;font-size:15px}
 
-/* ── الورقة واللصيقة (بالمليمتر الحقيقي) ── */
+/* ── الورقة واللصيقة بالمليمتر الحقيقي ── */
 .sheet-wrap{position:relative;width:100%;overflow:hidden}
 .sheet-scale{position:absolute;top:0;right:0;transform-origin:top right}
-.page{position:relative;width:210mm;height:296.8mm;background:#fff;color:#111;overflow:hidden}
-.sheet-wrap .page{box-shadow:0 0 0 1px #e6dcc6,0 14px 28px -18px rgba(0,0,0,.55);border-radius:3px}
+.page{position:relative;background:#fff;color:#111;overflow:hidden}
+.sheet-wrap .page{box-shadow:0 0 0 1px #E6DCC6;border-radius:2px}
 .page-in{position:absolute;inset:0}
-.lb{position:absolute;display:flex;flex-direction:column;overflow:hidden;color:#111;background:#fff}
+.lb{position:absolute;overflow:hidden;background:#fff}
+.lb-box{position:absolute;left:50%;top:50%;display:flex;flex-direction:column;overflow:hidden;color:#111}
 .lb-in{flex:none;width:max-content;min-width:100%}
 .ln{white-space:pre}
-.pv .lb{outline:.35mm dashed #CDBB8E;outline-offset:-.35mm}
-.pv .lb.empty{background:#FCFAF4}
-.pv .lb.skip{background:repeating-linear-gradient(45deg,#EFE7D6 0 2mm,#fff 2mm 4mm);cursor:pointer}
+.pv .lb{outline:.3mm dashed #D2C29A;outline-offset:-.3mm}
+.pv .lb.empty{background:#FBF9F3}
+.pv .lb.skip{background:repeating-linear-gradient(45deg,#EEE6D4 0 2mm,#fff 2mm 4mm)}
 .pv .lb.click{cursor:pointer}
-.lb.bd{border:.25mm solid #000}
-.lb.test{border:.25mm dashed #000;align-items:center;justify-content:center;font:700 14pt 'IBM Plex Sans Arabic',sans-serif;color:#555}
-.lb.test::before,.lb.test::after{content:"";position:absolute;background:#999}
-.lb.test::before{width:6mm;height:.2mm;top:50%;left:50%;transform:translate(-50%,-50%)}
-.lb.test::after{width:.2mm;height:6mm;top:50%;left:50%;transform:translate(-50%,-50%)}
-.pager{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
-.pager b{font-family:Amiri,serif;font-size:21px;color:var(--green-ink)}
-.solo-box{display:grid;place-items:center;background:repeating-linear-gradient(45deg,var(--card-2) 0 8px,var(--card) 8px 16px);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;margin-bottom:12px;min-height:120px}
-.solo{position:relative;flex:none;box-shadow:0 0 0 1px #d8c9a4,0 10px 20px -14px rgba(0,0,0,.5);border-radius:3px;overflow:hidden;background:#fff}
+.lb.bd{box-shadow:inset 0 0 0 .25mm #000}
+.lb.test{box-shadow:inset 0 0 0 .25mm #000;display:grid;place-items:center;font:700 13pt 'IBM Plex Sans Arabic',sans-serif;color:#666}
+.pv-head{display:flex;align-items:center;justify-content:space-between;min-height:48px}
+.pv-head b{font-weight:600;color:var(--muted);font-size:14px}
+.pager{display:flex;align-items:center;gap:8px;font-size:14px}
+.pv-panel{padding:4px 14px 14px}
+.solo-box{display:grid;place-items:center;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;min-height:110px}
+.solo{position:relative;flex:none;box-shadow:0 0 0 1px #D8C9A4,0 8px 16px -12px rgba(0,0,0,.5);border-radius:2px;overflow:hidden;background:#fff}
 .solo .lb{top:0;right:0;transform-origin:top right}
 
+/* ── التنقل ── */
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:20;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;padding:4px 6px calc(4px + var(--safe-b))}
+nav.tabs .nav-brand{display:none}
+nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:11.5px;color:var(--muted);padding:6px 0;border-radius:12px}
+nav.tabs svg{width:22px;height:22px;stroke-width:1.6}
+nav.tabs button.on{color:var(--green-ink);font-weight:600}
+[data-theme="light"] nav.tabs button.on{color:var(--green)}
+nav.tabs button.on svg{color:var(--gold)}
+
 /* ── النوافذ ── */
-.sheet-bg{position:fixed;inset:0;background:rgba(10,20,15,.5);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fade .18s ease}
-.sheet{background:var(--card);width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:var(--r-xl) var(--r-xl) 0 0;padding:8px 18px calc(20px + var(--safe-b));animation:up .22s ease;border-top:2px solid var(--gold)}
-.sheet .grip{width:44px;height:5px;border-radius:5px;background:var(--line);margin:6px auto 10px}
-.sheet h3{font-family:Amiri,serif;font-size:24px;margin:4px 0 2px;color:var(--green-ink)}
-[data-theme="light"] .sheet h3{color:var(--green-d)}
-.sheet h4{margin:16px 0 8px;font-size:15px;color:var(--gold-ink)}
-.sheet .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
-@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-bg{position:fixed;inset:0;background:rgba(10,20,15,.45);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s ease}
+.sheet{background:var(--card);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:6px 16px 0;animation:up .2s ease}
+.sheet .grip{width:40px;height:4px;border-radius:4px;background:var(--line);margin:6px auto 8px}
+.sheet h3{font-family:Amiri,serif;font-size:21px;margin:2px 0 12px;color:var(--green-ink)}
+[data-theme="light"] .sheet h3{color:var(--green)}
+.sheet h4{margin:16px 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.sheet .txt{font-size:14px;color:var(--muted);margin:-6px 0 12px}
+.sheet-foot{position:sticky;bottom:0;background:var(--card);display:flex;gap:8px;padding:12px 0 calc(14px + var(--safe-b));margin-top:8px;border-top:1px solid var(--line)}
+.sheet-foot .btn{flex:1}
+.sheet-foot .btn.primary{flex:2}
+@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
 @keyframes fade{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + var(--safe-b));z-index:60;background:var(--green-d);color:#fff;padding:11px 18px;border-radius:999px;font-size:15px;box-shadow:var(--shadow);max-width:90vw;text-align:center;animation:up .2s ease;border:1px solid var(--gold)}
-.toast.err{background:var(--brick);border-color:transparent}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + var(--safe-b));z-index:60;background:#1B2A23;color:#fff;padding:9px 16px;border-radius:10px;font-size:14px;box-shadow:var(--shadow);max-width:90vw;text-align:center;animation:up .2s ease}
+.toast.err{background:var(--red)}
 
 /* ── الحاسوب ── */
 @media (min-width:900px){
-  :root{--nav-w:232px}
-  .layout{padding-right:var(--nav-w)}
-  nav.tabs{top:0;bottom:0;right:0;left:auto;width:var(--nav-w);flex-direction:column;justify-content:flex-start;gap:4px;padding:22px 14px;
-    border-top:0;border-left:1px solid var(--line);background:var(--card)}
-  nav.tabs .nav-brand{display:block;font-family:Amiri,serif;font-size:30px;font-weight:700;text-align:center;margin:0 0 18px;
-    background:linear-gradient(180deg,#FFF3CF 0%,#E8C676 32%,#B8862E 52%,#F2D58E 72%,#C9A04E 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-  [data-theme="light"] nav.tabs .nav-brand{background:linear-gradient(180deg,#B8862E,#7A5A1E);-webkit-background-clip:text;background-clip:text}
-  nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;font-size:16px;padding:12px 16px}
-  nav.tabs button.on{background:var(--green-l);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent)}
-  .head{padding:22px 34px 74px}
-  .head-inner{max-width:1180px;margin:0 auto}
-  main{padding:4px 28px 40px}
-  .cards{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
-  .ptab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
-  .ptab .pv-col{position:sticky;top:14px}
+  .layout{padding-right:220px}
+  nav.tabs{top:0;bottom:0;right:0;left:auto;width:220px;flex-direction:column;gap:2px;padding:20px 12px;border-top:0;border-left:1px solid var(--line);background:var(--card)}
+  nav.tabs .nav-brand{display:block;font-family:Amiri,serif;font-size:26px;font-weight:700;text-align:center;margin:0 0 16px;color:var(--gold)}
+  nav.tabs button{flex:none;flex-direction:row;gap:10px;font-size:15px;padding:10px 14px}
+  nav.tabs button.on{background:var(--green-l)}
+  .head{padding:14px 28px 32px}
+  main{padding:8px 28px 40px}
+  .cards{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .ptab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+  .pv-col{position:sticky;top:12px}
   .sheet-bg{align-items:center}
-  .sheet{border-radius:var(--r-xl);border:1px solid var(--gold);max-height:88vh}
+  .sheet{border-radius:20px;max-height:88vh}
   .sheet .grip{display:none}
-  .toast{bottom:28px}
+  .toast{bottom:24px}
 }
 
 /* ── الطباعة ── */
 #print-area{position:fixed;left:-99999px;top:0}
 @media print{
-  @page{size:A4;margin:0}
+  @page{margin:0}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
   body>*:not(#print-area){display:none!important}
   #print-area{position:static!important;left:auto!important}
@@ -251,6 +225,7 @@ nav.tabs button.on svg{color:var(--gold)}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
+<style id="page-size"></style>
 </head>
 <body>
 <div id="app"></div>
@@ -258,40 +233,44 @@ nav.tabs button.on svg{color:var(--gold)}
 
 <script>
 /* ═══════════ الثوابت ═══════════ */
-const MM = 96 / 25.4;               // بكسل في المليمتر
-const A4W = 210, A4H = 297;
+const MM = 96 / 25.4;
+const PAPERS = {A4:[210,297], A5:[148,210]};
 const FONTS = [
-  {k:'changa', n:'شانقا — Changa',          css:"'Changa'"},
-  {k:'amiri',  n:'أميري — Amiri',           css:"'Amiri'"},
-  {k:'naskh',  n:'النسخ — Noto Naskh',       css:"'Noto Naskh Arabic'"},
-  {k:'cairo',  n:'القاهرة — Cairo',          css:"'Cairo'"},
-  {k:'kufi',   n:'الكوفي — Reem Kufi',       css:"'Reem Kufi'"},
-  {k:'plex',   n:'بلكس — IBM Plex Arabic',   css:"'IBM Plex Sans Arabic'"},
-  {k:'roboto', n:'Roboto (فرنسي)',          css:"'Roboto'"},
-  {k:'mont',   n:'Montserrat (فرنسي)',      css:"'Montserrat'"},
-  {k:'lora',   n:'Lora (فرنسي)',            css:"'Lora'"}
+  {k:'changa', n:'شانقا — Changa',        css:"'Changa'"},
+  {k:'amiri',  n:'أميري — Amiri',         css:"'Amiri'"},
+  {k:'naskh',  n:'النسخ — Noto Naskh',     css:"'Noto Naskh Arabic'"},
+  {k:'cairo',  n:'القاهرة — Cairo',        css:"'Cairo'"},
+  {k:'kufi',   n:'الكوفي — Reem Kufi',     css:"'Reem Kufi'"},
+  {k:'plex',   n:'بلكس — IBM Plex',        css:"'IBM Plex Sans Arabic'"},
+  {k:'roboto', n:'Roboto',               css:"'Roboto'"},
+  {k:'mont',   n:'Montserrat',           css:"'Montserrat'"},
+  {k:'lora',   n:'Lora',                 css:"'Lora'"}
 ];
 const ALIGN = {r:'right', c:'center', l:'left'};
 const VALIGN = {t:'flex-start', m:'center', b:'flex-end'};
 
-const MOTIF_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><g fill='none' stroke='#F0D59A' stroke-width='1.1' stroke-linejoin='round'><rect x='14' y='22' width='34' height='22' rx='4' transform='rotate(-10 31 33)'/><path d='M22 32h18M25 37h12' transform='rotate(-10 31 33)'/><rect x='72' y='78' width='34' height='22' rx='4' transform='rotate(8 89 89)'/><path d='M80 88h18M83 93h12' transform='rotate(8 89 89)'/></g><g fill='#F0D59A'><path d='M88 26l1.4 4 4 1.4-4 1.4-1.4 4-1.4-4-4-1.4 4-1.4z'/><path d='M26 86l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z'/></g></svg>`;
+const MOTIF_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><g fill='none' stroke='#F0D59A' stroke-width='1.1' stroke-linejoin='round'><rect x='14' y='22' width='34' height='22' rx='4' transform='rotate(-10 31 33)'/><path d='M22 32h18M25 37h12' transform='rotate(-10 31 33)'/><rect x='72' y='78' width='34' height='22' rx='4' transform='rotate(8 89 89)'/><path d='M80 88h18M83 93h12' transform='rotate(8 89 89)'/></g></svg>`;
 document.documentElement.style.setProperty('--motif', `url("data:image/svg+xml,${encodeURIComponent(MOTIF_SVG)}")`);
+const WAVES = `<svg class="waves" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true">
+  <path class="w1" d="M0 10 C 200 0, 380 22, 600 10 S 980 0, 1200 12"/>
+  <path class="w2" d="M0 14 C 220 4, 400 26, 620 14 S 1000 4, 1200 16 L1200 24 L0 24 Z"/></svg>`;
 
-const WAVES = `<svg class="waves" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
-  <path class="w1" d="M0 26 C 180 4, 340 52, 560 30 S 940 6, 1200 28 L1200 60 L0 60 Z"/>
-  <defs><linearGradient id="mg" x1="0" x2="1"><stop offset="0" stop-color="#B8862E"/><stop offset=".25" stop-color="#F2D58E"/><stop offset=".5" stop-color="#C9A04E"/><stop offset=".75" stop-color="#FFF3CF"/><stop offset="1" stop-color="#B8862E"/></linearGradient></defs>
-  <path class="w2" d="M0 36 C 200 14, 380 58, 600 36 S 980 16, 1200 38"/>
-  <path class="w3" d="M0 42 C 220 22, 400 62, 620 42 S 1000 24, 1200 44 L1200 60 L0 60 Z"/></svg>`;
-
+const svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 const IC = {
-  print:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8V4h10v4"/><rect x="3.5" y="8" width="17" height="8" rx="3"/><path d="M7 14h10v6H7z"/></svg>',
-  label:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3.5" y="6" width="17" height="12" rx="3"/><path d="M7.5 10.5h9M9 14h6"/></svg>',
-  sheet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 9h14M5 15h14M12 3v18"/></svg>',
-  menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
-  install:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/></svg>',
-  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
-  right:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>',
-  left:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>'
+  print: svg('<path d="M7 8V4h10v4"/><rect x="3.5" y="8" width="17" height="8" rx="2.5"/><path d="M7 14h10v6H7z"/>'),
+  label: svg('<rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="M7.5 10.5h9M9 14h6"/>'),
+  sheet: svg('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 9h14M5 15h14M12 3v18"/>'),
+  menu:  svg('<path d="M5 7h14M5 12h14M5 17h9"/>'),
+  install: svg('<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/>'),
+  plus:  svg('<path d="M12 5v14M5 12h14"/>'),
+  edit:  svg('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'),
+  copy:  svg('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>'),
+  trash: svg('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+  fill:  svg('<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/><path d="M14 14h4v4h-4z" fill="currentColor"/>'),
+  up:    svg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
+  x:     svg('<path d="M7 7l10 10M17 7L7 17"/>'),
+  right: svg('<path d="M9 6l6 6-6 6"/>'),
+  left:  svg('<path d="M15 6l-6 6 6 6"/>')
 };
 
 /* ═══════════ أدوات ═══════════ */
@@ -309,40 +288,48 @@ const LS = {
 function toast(msg, err=false){
   $$('.toast').forEach(t => t.remove());
   const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2600);
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2400);
 }
 
 /* ═══════════ البيانات ═══════════ */
 function seed(){
-  const t1 = {id:uid(), name:'ورق 3 × 8 — 70×37', w:70, h:37, cols:3, rows:8, top:0.4, side:0, gx:0, gy:0};
-  const t2 = {id:uid(), name:'ورق 2 × 7 — 99×38', w:99, h:38, cols:2, rows:7, top:15.5, side:6, gx:0, gy:0};
-  const c1 = {id:uid(), name:'مثال: براغي M6', tplId:t1.id, align:'c', valign:'m', pad:2, lh:1.25, fit:true, lines:[
-    {t:'براغي M6', f:'changa', s:18, b:true},
-    {t:'Vis M6 × 30', f:'roboto', s:10, b:false},
-    {t:'العلبة: 100 قطعة', f:'naskh', s:11, b:false}]};
+  const t1 = {id:uid(), name:'3 × 8 — 70×37', paper:'A4', w:70, h:37, cols:3, rows:8, top:0.4, side:0, gx:0, gy:0};
+  const t2 = {id:uid(), name:'2 × 7 — 99×38', paper:'A4', w:99, h:38, cols:2, rows:7, top:15.5, side:6, gx:0, gy:0};
+  const c1 = {id:uid(), name:'مثال: براغي M6', tplId:t1.id, align:'c', valign:'m', rot:0, pad:2, lh:1.25, lgap:0.5, fit:true, lines:[
+    {t:'براغي M6', f:'changa', s:18, b:true}, {t:'Vis M6 × 30', f:'roboto', s:10, b:false}, {t:'العلبة: 100 قطعة', f:'naskh', s:11, b:false}]};
   return {tpls:[t1, t2], items:[c1], queue:[{itemId:c1.id, qty:24}], tplId:t1.id, start:1, border:false, cal:{x:0, y:0}};
 }
 let D = LS.get('lsq_data') || seed();
-D.tpls ||= []; D.items ||= []; D.queue ||= []; D.cal ||= {x:0, y:0}; D.start ||= 1;
-if (!D.tpls.length) D = seed();
+function normalize(){
+  D.tpls ||= []; D.items ||= []; D.queue ||= []; D.cal ||= {x:0, y:0}; D.start ||= 1;
+  if (!D.tpls.length) D = seed();
+  D.tpls.forEach(t => { t.paper ||= 'A4'; });
+  D.items.forEach(i => { i.rot = +i.rot || 0; i.lgap ??= 0; });
+}
+normalize();
 const save = () => LS.set('lsq_data', D);
 const tplById = id => D.tpls.find(t => t.id === id);
 const tpl = () => tplById(D.tplId) || D.tpls[0];
 const itemById = id => D.items.find(i => i.id === id);
 const fontOf = k => FONTS.find(f => f.k === k) || FONTS[0];
 const perSheet = T => T.cols * T.rows;
+const paperWH = T => T.paper === 'custom' ? [num(T.pw, 210), num(T.ph, 297)] : (PAPERS[T.paper] || PAPERS.A4);
+const paperName = T => T.paper === 'custom' ? `${paperWH(T).join('×')} ملم` : T.paper;
 
 let S = { tab:'print', page:0 };
 
 /* ═══════════ رسم اللصيقة والورقة ═══════════ */
 function linesHTML(it){
-  return `<div class="lb-in" style="line-height:${it.lh || 1.25}">${it.lines.map(l => {
+  const gap = num(it.lgap);
+  return `<div class="lb-in" style="line-height:${it.lh || 1.25}">${it.lines.map((l, k) => {
     const F = fontOf(l.f);
-    return `<div class="ln" dir="auto" style="font-family:${F.css},'IBM Plex Sans Arabic',sans-serif;font-size:calc(${num(l.s,12)}pt * var(--k,1));font-weight:${l.b ? 700 : 400}">${esc(l.t) || '&nbsp;'}</div>`;
+    return `<div class="ln" dir="auto" style="font-family:${F.css},'IBM Plex Sans Arabic',sans-serif;font-size:calc(${num(l.s,12)}pt * var(--k,1));font-weight:${l.b ? 700 : 400}${k && gap ? `;margin-top:calc(${gap}mm * var(--k,1))` : ''}">${esc(l.t) || '&nbsp;'}</div>`;
   }).join('')}</div>`;
 }
-function labelStyle(it, T, x, y){
-  return `right:${x}mm;top:${y}mm;width:${T.w}mm;height:${T.h}mm;padding:${num(it.pad,2)}mm;justify-content:${VALIGN[it.valign] || 'center'};text-align:${ALIGN[it.align] || 'center'}`;
+/* صندوق المحتوى داخل اللصيقة؛ عند الدوران تُقلب أبعاده ويدور حول مركزه */
+function boxHTML(it, T){
+  const rot = +it.rot || 0, bw = rot ? T.h : T.w, bh = rot ? T.w : T.h;
+  return `<div class="lb-box" ${it.fit ? 'data-fit' : ''} style="width:${bw}mm;height:${bh}mm;padding:${num(it.pad,2)}mm;justify-content:${VALIGN[it.valign] || 'center'};text-align:${ALIGN[it.align] || 'center'};transform:translate(-50%,-50%) rotate(${rot}deg)">${linesHTML(it)}</div>`;
 }
 function cellPos(T, idx){
   const r = Math.floor(idx / T.cols), c = idx % T.cols;
@@ -350,56 +337,50 @@ function cellPos(T, idx){
 }
 /* mode: preview | print | test | outline */
 function pageHTML(T, cells, mode, pageNo=0){
-  const per = perSheet(T);
+  const [pw, ph] = paperWH(T), per = perSheet(T);
   const shift = (mode === 'print' || mode === 'test') ? `transform:translate(${num(D.cal.x)}mm,${num(D.cal.y)}mm)` : '';
   let h = '';
   for (let i = 0; i < per; i++){
     const {x, y} = cellPos(T, i), c = cells[i];
     const base = `right:${x}mm;top:${y}mm;width:${T.w}mm;height:${T.h}mm`;
+    const click = mode === 'preview' && pageNo === 0 ? ' click' : '';
     if (mode === 'test'){ h += `<div class="lb test" style="${base}">${i+1}</div>`; continue; }
     if (mode === 'outline'){ h += `<div class="lb empty" style="${base}"></div>`; continue; }
-    if (c && c !== 'skip'){
-      h += `<div class="lb${D.border ? ' bd' : ''}${mode==='preview' && pageNo===0 ? ' click' : ''}" data-i="${i}" ${c.fit ? 'data-fit' : ''} style="${labelStyle(c, T, x, y)}">${linesHTML(c)}</div>`;
-    } else if (mode === 'preview'){
-      h += `<div class="lb ${c === 'skip' ? 'skip' : 'empty'}${pageNo===0 ? ' click' : ''}" data-i="${i}" style="${base}"></div>`;
-    }
+    if (c && c !== 'skip') h += `<div class="lb${D.border ? ' bd' : ''}${click}" data-i="${i}" style="${base}">${boxHTML(c, T)}</div>`;
+    else if (mode === 'preview') h += `<div class="lb ${c === 'skip' ? 'skip' : 'empty'}${click}" data-i="${i}" style="${base}"></div>`;
   }
-  return `<div class="page"><div class="page-in" style="${shift}">${h}</div></div>`;
+  return `<div class="page" style="width:${pw}mm;height:${r2(ph - 0.2)}mm"><div class="page-in" style="${shift}">${h}</div></div>`;
+}
+function innerFree(box){
+  const cs = getComputedStyle(box);
+  return [box.clientWidth - num(cs.paddingLeft) - num(cs.paddingRight), box.clientHeight - num(cs.paddingTop) - num(cs.paddingBottom)];
 }
 function fitAll(root){
-  $$('.lb[data-fit]', root).forEach(lb => {
-    const inn = lb.firstElementChild; if (!inn) return;
+  $$('.lb-box[data-fit]', root).forEach(box => {
+    const inn = box.firstElementChild; if (!inn) return;
     inn.style.setProperty('--k', 1);
-    const cs = getComputedStyle(lb);
-    const aw = lb.clientWidth - num(cs.paddingLeft) - num(cs.paddingRight);
-    const ah = lb.clientHeight - num(cs.paddingTop) - num(cs.paddingBottom);
+    const [aw, ah] = innerFree(box);
     const k = Math.min(1, aw / inn.offsetWidth, ah / inn.offsetHeight);
     if (k < 1) inn.style.setProperty('--k', (k * 0.97).toFixed(3));
   });
 }
-function overflows(lb){
-  const inn = lb.firstElementChild, cs = getComputedStyle(lb);
-  return inn.offsetWidth > lb.clientWidth - num(cs.paddingLeft) - num(cs.paddingRight) + 1 ||
-         inn.offsetHeight > lb.clientHeight - num(cs.paddingTop) - num(cs.paddingBottom) + 1;
+function overflows(box){
+  const inn = box.firstElementChild, [aw, ah] = innerFree(box);
+  return inn.offsetWidth > aw + 1 || inn.offsetHeight > ah + 1;
 }
-/* معاينة مصغّرة للصيقة واحدة داخل صندوق بعرض/ارتفاع أقصى */
 function soloHTML(it, T, maxW, maxH){
   const s = Math.min(maxW / (T.w * MM), maxH / (T.h * MM));
-  return `<div class="solo" style="width:${T.w*MM*s}px;height:${T.h*MM*s}px"><div class="lb" ${it.fit ? 'data-fit' : ''} style="${labelStyle(it, T, 0, 0)};transform:scale(${s})">${linesHTML(it)}</div></div>`;
+  return `<div class="solo" style="width:${T.w*MM*s}px;height:${T.h*MM*s}px"><div class="lb" style="width:${T.w}mm;height:${T.h}mm;transform:scale(${s})">${boxHTML(it, T)}</div></div>`;
 }
 function sheetThumb(T, w){
-  const s = w / (A4W * MM);
-  return `<div class="thumb pv" style="width:${w}px;height:${A4H*MM*s}px"><div style="position:absolute;top:0;right:0;transform:scale(${s});transform-origin:top right">${pageHTML(T, [], 'outline')}</div></div>`;
+  const [pw, ph] = paperWH(T), s = w / (pw * MM);
+  return `<div class="thumb pv" style="width:${w}px;height:${ph*MM*s}px"><div style="position:absolute;top:0;right:0;transform:scale(${s});transform-origin:top right">${pageHTML(T, [], 'outline')}</div></div>`;
 }
-
-/* بناء خلايا الطباعة من قائمة "ما يُطبع" */
 function buildCells(){
-  const T = tpl(), per = perSheet(T);
-  const seq = [];
+  const T = tpl(), per = perSheet(T), seq = [];
   D.queue.forEach(q => { const it = itemById(q.itemId); if (it) for (let i = 0; i < q.qty; i++) seq.push(it); });
   const skip = Math.min(Math.max(1, D.start) - 1, per - 1);
-  const total = skip + seq.length;
-  const pages = Math.max(1, Math.ceil(total / per));
+  const pages = Math.max(1, Math.ceil((skip + seq.length) / per));
   const cells = new Array(pages * per).fill(null);
   for (let i = 0; i < skip; i++) cells[i] = 'skip';
   seq.forEach((it, i) => cells[skip + i] = it);
@@ -415,11 +396,9 @@ window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); instal
 window.addEventListener('appinstalled', () => { installEvt = null; renderHead(); toast('ثُبّت التطبيق'); });
 async function doInstall(){
   if (installEvt){ installEvt.prompt(); const r = await installEvt.userChoice; if (r.outcome === 'accepted') installEvt = null; renderHead(); return; }
-  if (isIOS) openSheet(`<h3>تثبيت التطبيق على آيفون</h3><div class="sub">آيفون لا يسمح بزر تثبيت مباشر:</div>
-    <div class="panel" style="box-shadow:none"><div class="prow"><div class="grow">١. افتح التطبيق في <b style="display:inline">Safari</b></div></div>
-    <div class="prow"><div class="grow">٢. اضغط زر المشاركة (المربع والسهم)</div></div>
-    <div class="prow"><div class="grow">٣. اختر «إضافة إلى الشاشة الرئيسية»</div></div></div>
-    <button class="btn-main" onclick="closeSheet()">فهمت</button>`);
+  if (isIOS) openSheet(`<h3>التثبيت على آيفون</h3><div class="panel">
+    <div class="row">١. افتح التطبيق في Safari</div><div class="row">٢. اضغط زر المشاركة</div><div class="row">٣. «إضافة إلى الشاشة الرئيسية»</div></div>
+    <div class="sheet-foot"><button class="btn primary" onclick="closeSheet()">فهمت</button></div>`);
 }
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
@@ -432,7 +411,7 @@ function applyTheme(){
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
 applyTheme();
 
-/* ═══════════ النوافذ ═══════════ */
+/* ═══════════ النوافذ والعناصر ═══════════ */
 function openSheet(html, onMount){
   closeSheet();
   const bg = document.createElement('div'); bg.className = 'sheet-bg'; bg.id = 'sheet';
@@ -447,23 +426,26 @@ function closeSheet(){ const s = $('#sheet'); if (s) s.remove(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
 function confirmBox(title, msg, okLabel='تأكيد', danger=false){
   return new Promise(res => {
-    openSheet(`<h3>${esc(title)}</h3><div class="sub">${esc(msg)}</div><div class="actions">
-      <button class="${danger ? 'btn-danger' : 'btn-main'}" id="cf-ok">${esc(okLabel)}</button><button class="btn-ghost" id="cf-no">إلغاء</button></div>`, sh => {
+    openSheet(`<h3>${esc(title)}</h3><p class="txt" style="margin:0">${esc(msg)}</p>
+      <div class="sheet-foot"><button class="btn ${danger ? 'danger' : 'primary'}" id="cf-ok">${esc(okLabel)}</button><button class="btn outline" id="cf-no">إلغاء</button></div>`, sh => {
       $('#cf-ok', sh).onclick = () => { closeSheet(); res(true); };
       $('#cf-no', sh).onclick = () => { closeSheet(); res(false); };
     });
   });
 }
-function stepper(id, val, cls=''){
-  return `<div class="qty ${cls}" data-qty="${id}"><button class="step" data-d="-1" aria-label="إنقاص">−</button><input id="${id}" class="num" inputmode="decimal" value="${esc(val)}"><button class="step" data-d="1" aria-label="زيادة">+</button></div>`;
-}
-/* ربط أزرار + و − بخانة رقمية */
+const stepper = (id, val) => `<div class="stp" data-qty="${id}"><button data-d="1" aria-label="زيادة">+</button><input id="${id}" class="num" inputmode="decimal" value="${esc(val)}"><button data-d="-1" aria-label="إنقاص">−</button></div>`;
 function bindSteppers(root, step, onSet){
   $$('[data-qty]', root).forEach(box => {
     const inp = $('input', box), st = typeof step === 'function' ? step(inp.id) : step;
-    $$('.step', box).forEach(b => b.onclick = () => { inp.value = r2(num(inp.value) + st * num(b.dataset.d)); onSet(inp.id, inp.value); });
+    $$('button', box).forEach(b => b.onclick = () => { inp.value = r2(num(inp.value) + st * num(b.dataset.d)); onSet(inp.id, inp.value); });
     inp.onchange = () => onSet(inp.id, inp.value);
   });
+}
+const segHTML = (key, val, opts) => `<div class="seg" data-seg="${key}">${opts.map(([v,l]) => `<button type="button" data-v="${v}" class="${String(val) === String(v) ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+function bindSegs(root, onSet){
+  $$('[data-seg]', root).forEach(sg => $$('button', sg).forEach(b => b.onclick = () => {
+    $$('button', sg).forEach(x => x.classList.toggle('on', x === b)); onSet(sg.dataset.seg, b.dataset.v);
+  }));
 }
 
 /* ═══════════ الهيكل ═══════════ */
@@ -474,78 +456,66 @@ function renderShell(){
   $$('nav.tabs button').forEach(b => b.onclick = () => goTab(b.dataset.tab));
 }
 function renderHead(){
-  const T = tpl();
-  let title, sub, ring = '';
-  if (S.tab === 'print'){
-    const b = buildCells(), used = (b.skip + b.count) % b.per || (b.count ? b.per : 0);
-    title = 'طباعة اللصيقات'; sub = `${esc(T.name)} · ${b.pages} ${b.pages > 1 ? 'أوراق' : 'ورقة'}`;
-    const C = 2 * Math.PI * 34, p = b.per ? used / b.per : 0;
-    ring = `<div class="ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="6"/>
-      <circle cx="40" cy="40" r="34" fill="none" stroke="#E6C579" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C*p} ${C}"/></svg>
-      <div class="lbl"><span><b class="num">${b.count}</b>لصيقة</span></div></div>`;
-  } else if (S.tab === 'items'){ title = 'المحتويات'; sub = `${D.items.length} محتوى محفوظ`; }
-  else { title = 'قوالب الأوراق'; sub = `${D.tpls.length} قالب · قِس بالمسطرة مرة واحدة`; }
-  $('#head').innerHTML = `<div class="head-inner"><div class="head-top"><div><div class="brand">اللصيقات</div><span class="brand-sub">طباعة على أوراق A4 اللاصقة</span></div>
-    <div class="head-actions">${canInstall() ? `<button class="install-chip" id="h-inst">${IC.install}<span>ثبّت</span></button>` : ''}<button class="icon-btn" id="h-menu" aria-label="القائمة">${IC.menu}</button></div></div>
-    <div class="head-body"><div><div class="head-title">${title}</div><div class="head-sub">${sub}</div></div>${ring}</div></div>${WAVES}`;
+  $('#head').innerHTML = `<div class="head-in"><div class="brand">اللصيقات</div><div class="head-actions">
+    ${canInstall() ? `<button class="hbtn" id="h-inst">${IC.install}<span>ثبّت</span></button>` : ''}<button class="hbtn" id="h-menu" aria-label="الإعدادات">${IC.menu}</button></div></div>${WAVES}`;
   $('#h-menu').onclick = openMenu;
   if ($('#h-inst')) $('#h-inst').onclick = doInstall;
 }
 function goTab(t){
   S.tab = t;
   $$('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
-  renderHead();
   ({print:renderPrint, items:renderItems, tpls:renderTpls})[t]();
   window.scrollTo(0, 0);
 }
 
 /* ═══════════ تبويب الطباعة ═══════════ */
 function renderPrint(){
-  const T = tpl(), per = perSheet(T);
-  S.page = Math.min(S.page, buildCells().pages - 1);
+  const T = tpl();
   $('#main').innerHTML = `<div class="ptab"><div>
+    <div class="page-h"><h2>الطباعة</h2></div>
     <div class="panel">
-      <div class="field"><label>قالب الورقة</label><select id="p-tpl">${D.tpls.map(t => `<option value="${t.id}" ${t.id === T.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></div>
-      <div class="prow"><div class="grow">ابدأ من اللصيقة رقم<small>لورقة استُعمل جزء منها · أو اضغط على اللصيقة في المعاينة</small></div>${stepper('p-start', D.start, 'sm')}</div>
-      <label class="switch"><span>إطار أسود حول كل لصيقة<small>مفيد عند الطباعة على ورق عادي</small></span><input type="checkbox" id="p-bd" ${D.border ? 'checked' : ''}></label>
+      <div class="row"><div class="lbl">القالب</div><select class="sel" id="p-tpl">${D.tpls.map(t => `<option value="${t.id}" ${t.id === T.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></div>
+      <div class="row"><div class="lbl">البدء من اللصيقة<small>لورقة مستعملة جزئياً</small></div>${stepper('p-start', D.start)}</div>
     </div>
-    <div class="section-h"><h2>ما يُطبع</h2><button class="btn-small gold" id="p-add">+ أضف محتوى</button></div>
+    <div class="sub-h"><h3>ما يُطبع</h3><button class="btn sm outline" id="p-add">${IC.plus}إضافة</button></div>
     <div class="panel" id="p-queue"></div>
-    <div class="actions"><button class="btn-main" id="p-go">معاينة وطباعة</button><button class="btn-ghost" id="p-test">ورقة اختبار للمعايرة</button></div>
+    <div class="meta" id="p-meta"></div>
+    <button class="btn primary block" id="p-go" style="margin-top:12px">${IC.print}طباعة</button>
   </div>
-  <div class="pv-col"><div class="panel"><div class="pager" id="p-pager"></div><div class="sheet-wrap pv" id="pv"><div class="sheet-scale"></div></div>
-    <div class="hint">المخطّط بالأسفل مثل الورقة تماماً · المربعات المخطّطة لن تُطبع</div></div></div></div>`;
-  $('#p-tpl').onchange = e => { D.tplId = e.target.value; D.start = 1; S.page = 0; save(); goTab('print'); };
-  $('#p-bd').onchange = e => { D.border = e.target.checked; save(); drawPreview(); };
-  bindSteppers($('#main'), 1, (id, v) => { D.start = Math.min(per, Math.max(1, Math.round(num(v, 1)))); save(); $('#p-start').value = D.start; refreshPrint(); });
+  <div class="pv-col"><div class="panel pv-panel"><div class="pv-head"><b>المعاينة</b><div class="pager" id="p-pager"></div></div>
+    <div class="sheet-wrap pv" id="pv"><div class="sheet-scale"></div></div></div></div></div>`;
+  $('#p-tpl').onchange = e => { D.tplId = e.target.value; D.start = 1; S.page = 0; save(); renderPrint(); };
+  bindSteppers($('.panel', $('#main')), 1, (id, v) => { D.start = Math.min(perSheet(tpl()), Math.max(1, Math.round(num(v, 1)))); save(); $('#p-start').value = D.start; refreshPrint(); });
   $('#p-add').onclick = openAddSheet;
   $('#p-go').onclick = openPrintSheet;
-  $('#p-test').onclick = () => doPrint('test');
   $('#pv').onclick = e => {
     const lb = e.target.closest('.lb.click'); if (!lb) return;
     D.start = +lb.dataset.i + 1; save(); $('#p-start').value = D.start; refreshPrint();
-    toast(`البداية من اللصيقة ${D.start}`);
   };
-  renderQueue(); drawPreview();
-  if (!S.ro){ S.ro = new ResizeObserver(() => scalePreview()); }
+  refreshPrint();
+  S.ro ||= new ResizeObserver(() => scalePreview());
   S.ro.disconnect(); S.ro.observe($('#pv'));
 }
-function refreshPrint(){ renderQueue(); drawPreview(); renderHead(); }
+function refreshPrint(){
+  renderQueue(); drawPreview();
+  const c = buildCells();
+  $('#p-meta').textContent = c.count ? `${c.count} لصيقة · ${c.pages} ${c.pages > 1 ? 'أوراق' : 'ورقة'} ${paperName(c.T)}` : '';
+}
 function renderQueue(){
   const box = $('#p-queue'); if (!box) return;
   const T = tpl();
   D.queue = D.queue.filter(q => itemById(q.itemId));
-  if (!D.queue.length){ box.innerHTML = `<div class="empty">لا شيء بعد.<br>اضغط «أضف محتوى» لاختيار ما تريد طباعته.</div>`; return; }
+  if (!D.queue.length){ box.innerHTML = `<div class="empty">اضغط «إضافة» لاختيار محتوى</div>`; return; }
   box.innerHTML = D.queue.map((q, k) => {
     const it = itemById(q.itemId), other = it.tplId && it.tplId !== T.id && tplById(it.tplId);
-    return `<div class="prow" data-k="${k}"><div class="grow"><b>${esc(it.name)}</b><small>${other ? `<span class="tag gold">مصمَّم لـ ${esc(other.name)}</span>` : `${it.lines.length} سطر`}</small></div>
-      ${stepper('q-' + k, q.qty, 'sm')}<button class="btn-small" data-fill="${k}" title="املأ باقي الورقة">املأ</button><button class="x-btn" data-del="${k}" aria-label="حذف">${IC.x}</button></div>`;
+    return `<div class="row"><div class="lbl"><b>${esc(it.name)}</b>${other ? `<small>مصمَّم لقالب ${esc(other.name)}</small>` : ''}</div>
+      ${stepper('q-' + k, q.qty)}<button class="ibtn" data-fill="${k}" title="املأ باقي الورقة" aria-label="املأ باقي الورقة">${IC.fill}</button><button class="ibtn danger" data-del="${k}" aria-label="حذف">${IC.x}</button></div>`;
   }).join('');
-  bindSteppers(box, 1, (id, v) => { const k = +id.slice(2); D.queue[k].qty = Math.max(0, Math.round(num(v))); save(); refreshPrint(); });
+  bindSteppers(box, 1, (id, v) => { D.queue[+id.slice(2)].qty = Math.max(0, Math.round(num(v))); save(); refreshPrint(); });
   $$('[data-fill]', box).forEach(b => b.onclick = () => {
     const k = +b.dataset.fill, c = buildCells(), used = c.skip + c.count, rem = (c.per - used % c.per) % c.per;
-    D.queue[k].qty += rem || (used ? 0 : c.per);
-    if (!rem && used) toast('الورقة ممتلئة'); save(); refreshPrint();
+    if (!rem && used) return toast('الورقة ممتلئة');
+    D.queue[k].qty += rem || c.per; save(); refreshPrint();
   });
   $$('[data-del]', box).forEach(b => b.onclick = () => { D.queue.splice(+b.dataset.del, 1); save(); refreshPrint(); });
 }
@@ -553,125 +523,120 @@ function drawPreview(){
   const pv = $('#pv'); if (!pv) return;
   const c = buildCells();
   S.page = Math.min(S.page, c.pages - 1);
-  const slice = c.cells.slice(S.page * c.per, (S.page + 1) * c.per);
-  $('.sheet-scale', pv).innerHTML = pageHTML(c.T, slice, 'preview', S.page);
-  $('#p-pager').innerHTML = `<b>معاينة</b>${c.pages > 1 ? `<div class="qty sm"><button class="step" id="pg-prev" ${S.page === 0 ? 'disabled' : ''}>${IC.right}</button>
-    <span class="num" style="min-width:54px;text-align:center">${S.page + 1} / ${c.pages}</span><button class="step" id="pg-next" ${S.page >= c.pages - 1 ? 'disabled' : ''}>${IC.left}</button></div>` : `<span class="tag">ورقة واحدة</span>`}`;
+  $('.sheet-scale', pv).innerHTML = pageHTML(c.T, c.cells.slice(S.page * c.per, (S.page + 1) * c.per), 'preview', S.page);
+  $('#p-pager').innerHTML = c.pages > 1 ? `<button class="ibtn" id="pg-prev" ${S.page === 0 ? 'disabled' : ''} aria-label="السابقة">${IC.right}</button>
+    <span class="num">${S.page + 1} / ${c.pages}</span><button class="ibtn" id="pg-next" ${S.page >= c.pages - 1 ? 'disabled' : ''} aria-label="التالية">${IC.left}</button>` : '';
   if ($('#pg-prev')){ $('#pg-prev').onclick = () => { S.page--; drawPreview(); }; $('#pg-next').onclick = () => { S.page++; drawPreview(); }; }
-  scalePreview();
-  fitAll(pv);
+  scalePreview(); fitAll(pv);
 }
 function scalePreview(){
   const pv = $('#pv'); if (!pv) return;
-  const s = pv.clientWidth / (A4W * MM);
+  const [pw, ph] = paperWH(tpl()), s = pv.clientWidth / (pw * MM);
   $('.sheet-scale', pv).style.transform = `scale(${s})`;
-  pv.style.height = (A4H * MM * s) + 'px';
+  pv.style.height = (ph * MM * s) + 'px';
 }
-
 function openAddSheet(){
   if (!D.items.length){ toast('أنشئ محتوى أولاً'); goTab('items'); return; }
-  const T = tpl();
-  openSheet(`<h3>أضف محتوى للطباعة</h3><div class="sub">يُضاف بعدد يملأ باقي الورقة، ويمكنك تعديل العدد بعدها.</div>
-    <div class="cards">${D.items.map(it => `<button class="wcard" data-id="${it.id}" style="text-align:start"><div class="wtop">${soloHTML(it, tplById(it.tplId) || T, 96, 60)}
-      <div class="wname"><b>${esc(it.name)}</b><span>${esc((tplById(it.tplId) || T).name)}</span></div></div></button>`).join('')}</div>`, sh => {
+  openSheet(`<h3>إضافة للطباعة</h3><div class="cards">${D.items.map(it => { const T = tplById(it.tplId) || tpl();
+    return `<button class="card pick" data-id="${it.id}">${soloHTML(it, T, 84, 54)}<div class="info"><b>${esc(it.name)}</b><small>${esc(T.name)}</small></div></button>`; }).join('')}</div>
+    <div class="sheet-foot"><button class="btn outline" onclick="closeSheet()">إغلاق</button></div>`, sh => {
     fitAll(sh);
-    $$('[data-id]', sh).forEach(b => b.onclick = () => { addToQueue(b.dataset.id); closeSheet(); });
+    $$('[data-id]', sh).forEach(b => b.onclick = () => { addToQueue(b.dataset.id); closeSheet(); if (S.tab === 'print') renderPrint(); });
   });
 }
 function addToQueue(id){
   const it = itemById(id); if (!it) return;
-  if (!D.queue.length && it.tplId && tplById(it.tplId) && it.tplId !== D.tplId){ D.tplId = it.tplId; D.start = 1; toast('تم اختيار قالب هذا المحتوى'); }
+  if (!D.queue.length && tplById(it.tplId) && it.tplId !== D.tplId){ D.tplId = it.tplId; D.start = 1; }
   const c = buildCells(), used = c.skip + c.count, rem = (c.per - used % c.per) % c.per;
   const ex = D.queue.find(q => q.itemId === id);
-  const add = rem || c.per;
-  if (ex) ex.qty += add; else D.queue.push({itemId:id, qty:add});
+  if (ex) ex.qty += rem || c.per; else D.queue.push({itemId:id, qty:rem || c.per});
   save();
 }
 
 /* ═══════════ الطباعة ═══════════ */
 function openPrintSheet(){
   const c = buildCells();
-  if (!c.count){ toast('أضف محتوى للطباعة أولاً', true); return; }
-  openSheet(`<h3>قبل الطباعة</h3><div class="sub">${c.count} لصيقة على ${c.pages} ${c.pages > 1 ? 'أوراق' : 'ورقة'} · ${esc(c.T.name)}</div>
-    <div class="notice info"><b>مهم في نافذة الطباعة:</b><ul class="guide" style="color:inherit;margin-top:4px">
-      <li>المقياس / Scale: <b>100%</b> أو «الحجم الفعلي»</li><li>ألغِ «ملاءمة الصفحة / Fit to page»</li>
-      <li>الهوامش / Margins: <b>لا شيء / None</b></li><li>الورق: <b>A4</b> · ألغِ «الرأس والتذييل»</li></ul></div>
-    ${(D.cal.x || D.cal.y) ? `<div class="notice ok">المعايرة مفعّلة: أفقي ${D.cal.x} ملم · عمودي ${D.cal.y} ملم</div>` : ''}
-    <div class="actions"><button class="btn-main" id="pr-go">اطبع الآن</button><button class="btn-ghost" onclick="closeSheet()">رجوع</button></div>`, sh => {
+  if (!c.count) return toast('أضف محتوى للطباعة أولاً', true);
+  openSheet(`<h3>طباعة</h3><p class="txt">${c.count} لصيقة · ${c.pages} ${c.pages > 1 ? 'أوراق' : 'ورقة'} ${paperName(c.T)}</p>
+    <div class="note ok">في نافذة الطباعة: الورق <b>${paperName(c.T)}</b> · المقياس <b>100%</b> · الهوامش <b>بلا</b></div>
+    <div class="panel"><label class="row switch"><div class="lbl">إطار حول كل لصيقة<small>للطباعة على ورق عادي ثم القص</small></div><input type="checkbox" id="pr-bd" ${D.border ? 'checked' : ''}></label></div>
+    <div class="sheet-foot"><button class="btn primary" id="pr-go">${IC.print}اطبع</button><button class="btn outline" id="pr-test">ورقة اختبار</button></div>`, sh => {
+    $('#pr-bd', sh).onchange = e => { D.border = e.target.checked; save(); drawPreview(); };
     $('#pr-go', sh).onclick = () => { closeSheet(); doPrint('print'); };
+    $('#pr-test', sh).onclick = () => { closeSheet(); doPrint('test'); };
   });
 }
 async function doPrint(mode){
-  const c = buildCells(), pa = $('#print-area');
+  const c = buildCells(), pa = $('#print-area'), [pw, ph] = paperWH(c.T);
+  $('#page-size').textContent = `@media print{@page{size:${pw}mm ${ph}mm;margin:0}}`;
   if (mode === 'test') pa.innerHTML = pageHTML(c.T, [], 'test');
-  else {
-    let h = '';
-    for (let p = 0; p < c.pages; p++) h += pageHTML(c.T, c.cells.slice(p * c.per, (p + 1) * c.per), 'print');
-    pa.innerHTML = h;
-  }
+  else { let h = ''; for (let p = 0; p < c.pages; p++) h += pageHTML(c.T, c.cells.slice(p * c.per, (p + 1) * c.per), 'print'); pa.innerHTML = h; }
   try { await document.fonts.ready; } catch(e){}
   fitAll(pa);
-  setTimeout(() => { window.print(); }, 60);
+  setTimeout(() => window.print(), 60);
 }
 window.addEventListener('afterprint', () => { $('#print-area').innerHTML = ''; });
 
 /* ═══════════ تبويب المحتويات ═══════════ */
 function renderItems(){
-  const T0 = tpl();
-  $('#main').innerHTML = `<div class="section-h"><h2>المحتويات المحفوظة</h2><button class="btn-small gold" id="i-new">+ محتوى جديد</button></div>
-    ${D.items.length ? `<div class="cards">${D.items.map(it => { const T = tplById(it.tplId) || T0; return `<div class="wcard" data-id="${it.id}">
-      <div class="wtop">${soloHTML(it, T, 130, 80)}<div class="wname"><b>${esc(it.name)}</b><span>${esc(T.name)} · ${it.lines.length} سطر</span></div></div>
-      <div class="wbtns"><button class="btn-small" data-a="print">اطبع</button><button class="btn-small gold" data-a="edit">تعديل</button><button class="btn-small gold" data-a="dup">نسخ</button><button class="btn-small red" data-a="del">حذف</button></div></div>`; }).join('')}</div>`
-    : `<div class="panel empty">لا يوجد محتوى بعد.<br>المحتوى هو نص اللصيقة: اسم المنتج وسطوره وخطوطه.</div>`}`;
+  $('#main').innerHTML = `<div class="page-h"><h2>المحتويات</h2><button class="btn sm primary" id="i-new">${IC.plus}جديد</button></div>
+    ${D.items.length ? `<div class="cards">${D.items.map(it => { const T = tplById(it.tplId) || tpl(); return `<div class="card" data-id="${it.id}">
+      ${soloHTML(it, T, 110, 70)}<div class="info"><b>${esc(it.name)}</b><small>${esc(T.name)}</small>
+      <div class="btns"><button class="btn sm outline" data-a="print">${IC.print}اطبع</button><span style="flex:1"></span>
+      <button class="ibtn" data-a="edit" aria-label="تعديل">${IC.edit}</button><button class="ibtn" data-a="dup" aria-label="نسخ">${IC.copy}</button><button class="ibtn danger" data-a="del" aria-label="حذف">${IC.trash}</button></div></div></div>`; }).join('')}</div>`
+    : `<div class="panel empty">لا يوجد محتوى بعد</div>`}`;
   fitAll($('#main'));
   $('#i-new').onclick = () => editItem(null);
-  $$('.wcard[data-id] [data-a]').forEach(b => b.onclick = async () => {
+  $$('.card[data-id] [data-a]').forEach(b => b.onclick = async () => {
     const id = b.closest('[data-id]').dataset.id, it = itemById(id), a = b.dataset.a;
     if (a === 'edit') editItem(id);
-    if (a === 'dup'){ const n = clone(it); n.id = uid(); n.name = it.name + ' (نسخة)'; D.items.splice(D.items.indexOf(it) + 1, 0, n); save(); renderItems(); renderHead(); }
+    if (a === 'dup'){ const n = clone(it); n.id = uid(); n.name = it.name + ' (نسخة)'; D.items.splice(D.items.indexOf(it) + 1, 0, n); save(); renderItems(); }
     if (a === 'print'){ addToQueue(id); goTab('print'); }
     if (a === 'del' && await confirmBox('حذف المحتوى', `سيُحذف «${it.name}» نهائياً.`, 'حذف', true)){
-      D.items = D.items.filter(x => x.id !== id); D.queue = D.queue.filter(q => q.itemId !== id); save(); renderItems(); renderHead();
+      D.items = D.items.filter(x => x.id !== id); D.queue = D.queue.filter(q => q.itemId !== id); save(); renderItems();
     }
   });
 }
 function editItem(id){
   const orig = id && itemById(id);
-  const d = orig ? clone(orig) : {id:uid(), name:'', tplId:tpl().id, align:'c', valign:'m', pad:2, lh:1.25, fit:true,
+  const d = orig ? clone(orig) : {id:uid(), name:'', tplId:tpl().id, align:'c', valign:'m', rot:0, pad:2, lh:1.25, lgap:0.5, fit:true,
     lines:[{t:'', f:'changa', s:16, b:true}, {t:'', f:'naskh', s:11, b:false}]};
-  const seg = (key, opts) => `<div class="seg" data-seg="${key}">${opts.map(([v,l]) => `<button data-v="${v}" class="${d[key] === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
-  const sh = openSheet(`<h3>${orig ? 'تعديل المحتوى' : 'محتوى جديد'}</h3><div class="sub">كل سطر هنا = سطر في اللصيقة</div>
-    <div class="solo-box" id="e-pv"></div><div class="notice warn hidden" id="e-warn">النص أكبر من اللصيقة — صغّر الخط أو فعّل «تصغير تلقائي».</div>
-    <div class="field"><label>اسم المحتوى (للحفظ فقط، لا يُطبع)</label><input id="e-name" value="${esc(d.name)}" placeholder="مثلاً: براغي M8"></div>
-    <div class="field"><label>القالب المرتبط</label><select id="e-tpl">${D.tpls.map(t => `<option value="${t.id}" ${t.id === d.tplId ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></div>
-    <h4>السطور</h4><div id="e-lines"></div><button class="btn-small gold" id="e-addl">+ سطر</button>
-    <h4>تنسيق اللصيقة</h4>
-    <div class="field"><label>المحاذاة الأفقية</label>${seg('align', [['r','يمين'],['c','وسط'],['l','يسار']])}</div>
-    <div class="field"><label>المحاذاة العمودية</label>${seg('valign', [['t','أعلى'],['m','وسط'],['b','أسفل']])}</div>
-    <div class="two"><div class="field"><label>الهامش الداخلي (ملم)</label>${stepper('e-pad', d.pad, 'sm')}</div><div class="field"><label>تباعد السطور</label>${stepper('e-lh', d.lh, 'sm')}</div></div>
-    <label class="switch"><span>تصغير تلقائي للملاءمة<small>يصغّر الخط إذا كان النص أكبر من اللصيقة</small></span><input type="checkbox" id="e-fit" ${d.fit ? 'checked' : ''}></label>
-    <div class="actions"><button class="btn-main" id="e-save">حفظ</button><button class="btn-ghost" onclick="closeSheet()">إلغاء</button></div>`);
+  const sh = openSheet(`<h3>${orig ? 'تعديل المحتوى' : 'محتوى جديد'}</h3>
+    <div class="solo-box" id="e-pv"></div><div class="note warn hidden" id="e-warn">النص أكبر من اللصيقة: صغّر الخط أو فعّل التصغير التلقائي</div>
+    <div class="field"><label>الاسم</label><input class="inp" id="e-name" value="${esc(d.name)}" placeholder="مثلاً: براغي M8"></div>
+    <div class="field"><label>القالب</label><select class="sel" id="e-tpl">${D.tpls.map(t => `<option value="${t.id}" ${t.id === d.tplId ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></div>
+    <h4>السطور</h4><div id="e-lines"></div><button class="btn sm outline" id="e-addl">${IC.plus}سطر</button>
+    <h4>التنسيق</h4>
+    <div class="field"><label>اتجاه الكتابة</label>${segHTML('rot', d.rot, [[0,'أفقي'],[90,'عمودي ↻'],[-90,'عمودي ↺']])}</div>
+    <div class="field"><label>المحاذاة</label>${segHTML('align', d.align, [['r','يمين'],['c','وسط'],['l','يسار']])}</div>
+    <div class="field">${segHTML('valign', d.valign, [['t','أعلى'],['m','وسط'],['b','أسفل']])}</div>
+    <div class="panel" style="box-shadow:none">
+      <div class="row"><div class="lbl">الفراغ بين السطور<small>بالملم</small></div>${stepper('e-lgap', d.lgap)}</div>
+      <div class="row"><div class="lbl">ارتفاع السطر</div>${stepper('e-lh', d.lh)}</div>
+      <div class="row"><div class="lbl">الهامش الداخلي<small>بالملم</small></div>${stepper('e-pad', d.pad)}</div>
+      <label class="row switch"><div class="lbl">تصغير تلقائي للملاءمة</div><input type="checkbox" id="e-fit" ${d.fit ? 'checked' : ''}></label>
+    </div>
+    <div class="sheet-foot"><button class="btn primary" id="e-save">حفظ</button><button class="btn outline" onclick="closeSheet()">إلغاء</button></div>`);
   const T = () => tplById(d.tplId) || tpl();
   const preview = () => {
     const box = $('#e-pv', sh);
-    box.innerHTML = soloHTML(d, T(), Math.min(box.clientWidth - 30, 520), 260);
-    const lb = $('.lb', box);
+    box.innerHTML = soloHTML(d, T(), Math.min(box.clientWidth - 28, 480), 220);
     fitAll(box);
-    $('#e-warn', sh).classList.toggle('hidden', d.fit || !overflows(lb));
+    $('#e-warn', sh).classList.toggle('hidden', d.fit || !overflows($('.lb-box', box)));
   };
   const drawLines = () => {
     $('#e-lines', sh).innerHTML = d.lines.map((l, k) => `<div class="lrow" data-k="${k}">
-      <input class="lt" dir="auto" value="${esc(l.t)}" placeholder="نص السطر ${k + 1}">
+      <input class="inp lt" dir="auto" value="${esc(l.t)}" placeholder="السطر ${k + 1}">
       <div class="lctl"><select class="lf">${FONTS.map(f => `<option value="${f.k}" ${f.k === l.f ? 'selected' : ''}>${f.n}</option>`).join('')}</select>
-      ${stepper('ls-' + k, l.s, 'sm')}<button class="b-btn ${l.b ? 'on' : ''}" title="غليظ">B</button>
-      ${k > 0 ? `<button class="step" data-up title="رفع">↑</button>` : ''}<button class="x-btn" data-x aria-label="حذف السطر">${IC.x}</button></div></div>`).join('');
+      ${stepper('ls-' + k, l.s)}<button class="ibtn b-btn ${l.b ? 'on' : ''}" title="غليظ">B</button>
+      <button class="ibtn" data-up ${k ? '' : 'disabled'} aria-label="رفع">${IC.up}</button><button class="ibtn danger" data-x aria-label="حذف السطر">${IC.x}</button></div></div>`).join('');
     $$('.lrow', sh).forEach(row => {
       const k = +row.dataset.k, l = d.lines[k];
       $('.lt', row).oninput = e => { l.t = e.target.value; preview(); };
       $('.lf', row).onchange = e => { l.f = e.target.value; preview(); };
       $('.b-btn', row).onclick = e => { l.b = !l.b; e.currentTarget.classList.toggle('on', l.b); preview(); };
       $('[data-x]', row).onclick = () => { if (d.lines.length < 2) return toast('يلزم سطر واحد على الأقل'); d.lines.splice(k, 1); drawLines(); preview(); };
-      if ($('[data-up]', row)) $('[data-up]', row).onclick = () => { [d.lines[k-1], d.lines[k]] = [d.lines[k], d.lines[k-1]]; drawLines(); preview(); };
+      $('[data-up]', row).onclick = () => { [d.lines[k-1], d.lines[k]] = [d.lines[k], d.lines[k-1]]; drawLines(); preview(); };
       bindSteppers(row, 1, (id, v) => { l.s = Math.min(96, Math.max(4, num(v, 12))); $('#' + id, row).value = l.s; preview(); });
     });
   };
@@ -679,17 +644,15 @@ function editItem(id){
   $('#e-addl', sh).onclick = () => { const last = d.lines[d.lines.length - 1] || {f:'naskh', s:11}; d.lines.push({t:'', f:last.f, s:last.s, b:false}); drawLines(); preview(); $$('.lt', sh).pop().focus(); };
   $('#e-tpl', sh).onchange = e => { d.tplId = e.target.value; preview(); };
   $('#e-fit', sh).onchange = e => { d.fit = e.target.checked; preview(); };
-  $$('[data-seg]', sh).forEach(sg => $$('button', sg).forEach(b => b.onclick = () => {
-    d[sg.dataset.seg] = b.dataset.v; $$('button', sg).forEach(x => x.classList.toggle('on', x === b)); preview();
-  }));
-  $$('.two [data-qty]', sh).forEach(box => bindSteppers(box.parentElement, id => id === 'e-pad' ? 0.5 : 0.05, (id, v) => {
-    if (id === 'e-pad') d.pad = Math.max(0, Math.min(15, num(v, 2))); else d.lh = Math.max(0.8, Math.min(3, r2(num(v, 1.25))));
-    $('#' + id, sh).value = id === 'e-pad' ? d.pad : d.lh; preview();
-  }));
+  bindSegs(sh, (k, v) => { d[k] = k === 'rot' ? +v : v; preview(); });
+  const LIM = {'e-lgap':['lgap',0.5,0,30], 'e-lh':['lh',0.05,0.8,3], 'e-pad':['pad',0.5,0,15]};
+  bindSteppers($('.panel', sh), id => LIM[id][1], (id, v) => {
+    const [k,, mn, mx] = LIM[id]; d[k] = Math.max(mn, Math.min(mx, r2(num(v, mn)))); $('#' + id, sh).value = d[k]; preview();
+  });
   $('#e-save', sh).onclick = () => {
     d.name = $('#e-name', sh).value.trim() || d.lines.find(l => l.t.trim())?.t.trim() || 'محتوى بدون اسم';
     if (orig) D.items[D.items.indexOf(orig)] = d; else D.items.unshift(d);
-    save(); closeSheet(); toast('حُفظ المحتوى'); goTab(S.tab);
+    save(); closeSheet(); toast('حُفظ'); goTab(S.tab);
   };
   document.fonts.ready.then(preview);
   preview();
@@ -697,91 +660,98 @@ function editItem(id){
 
 /* ═══════════ تبويب القوالب ═══════════ */
 function renderTpls(){
-  $('#main').innerHTML = `<div class="section-h"><h2>قوالب الأوراق</h2><button class="btn-small gold" id="t-new">+ قالب جديد</button></div>
-    <div class="cards">${D.tpls.map(T => `<div class="wcard" data-id="${T.id}"><div class="wtop">${sheetThumb(T, 64)}
-      <div class="wname"><b>${esc(T.name)}</b><span class="num" style="display:block">${T.w} × ${T.h} mm</span><span>${T.cols} × ${T.rows} = ${perSheet(T)} لصيقة${T.id === D.tplId ? ' · <span class="tag">المستعمل الآن</span>' : ''}</span></div></div>
-      <div class="wbtns"><button class="btn-small" data-a="use">استعمله</button><button class="btn-small gold" data-a="edit">تعديل</button><button class="btn-small gold" data-a="dup">نسخ</button><button class="btn-small red" data-a="del">حذف</button></div></div>`).join('')}</div>`;
+  $('#main').innerHTML = `<div class="page-h"><h2>القوالب</h2><button class="btn sm primary" id="t-new">${IC.plus}جديد</button></div>
+    <div class="cards">${D.tpls.map(T => `<div class="card" data-id="${T.id}">${sheetThumb(T, 52)}
+      <div class="info"><b>${esc(T.name)}</b><small>${paperName(T)} · <span class="num">${T.w}×${T.h}</span> ملم · ${perSheet(T)} لصيقة</small>
+      <div class="btns">${T.id === D.tplId ? `<span class="meta" style="padding:0">المستعمل حالياً</span>` : `<button class="btn sm outline" data-a="use">استعمله</button>`}<span style="flex:1"></span>
+      <button class="ibtn" data-a="edit" aria-label="تعديل">${IC.edit}</button><button class="ibtn" data-a="dup" aria-label="نسخ">${IC.copy}</button><button class="ibtn danger" data-a="del" aria-label="حذف">${IC.trash}</button></div></div></div>`).join('')}</div>`;
   $('#t-new').onclick = () => editTpl(null);
-  $$('.wcard[data-id] [data-a]').forEach(b => b.onclick = async () => {
+  $$('.card[data-id] [data-a]').forEach(b => b.onclick = async () => {
     const id = b.closest('[data-id]').dataset.id, T = tplById(id), a = b.dataset.a;
     if (a === 'edit') editTpl(id);
     if (a === 'use'){ D.tplId = id; D.start = 1; save(); goTab('print'); }
-    if (a === 'dup'){ const n = clone(T); n.id = uid(); n.name = T.name + ' (نسخة)'; D.tpls.push(n); save(); renderTpls(); renderHead(); }
+    if (a === 'dup'){ const n = clone(T); n.id = uid(); n.name = T.name + ' (نسخة)'; D.tpls.push(n); save(); renderTpls(); }
     if (a === 'del'){
       if (D.tpls.length < 2) return toast('يلزم قالب واحد على الأقل', true);
       const used = D.items.filter(i => i.tplId === id).length;
-      if (!(await confirmBox('حذف القالب', `سيُحذف «${T.name}».${used ? ` ${used} محتوى مرتبط به سيستعمل قالباً آخر.` : ''}`, 'حذف', true))) return;
+      if (!(await confirmBox('حذف القالب', `سيُحذف «${T.name}».${used ? ` ${used} محتوى مرتبط به سينتقل لقالب آخر.` : ''}`, 'حذف', true))) return;
       D.tpls = D.tpls.filter(t => t.id !== id);
       D.items.forEach(i => { if (i.tplId === id) i.tplId = D.tpls[0].id; });
       if (D.tplId === id) D.tplId = D.tpls[0].id;
-      save(); renderTpls(); renderHead();
+      save(); renderTpls();
     }
   });
 }
 function editTpl(id){
   const orig = id && tplById(id);
-  const d = orig ? clone(orig) : {id:uid(), name:'', w:70, h:37, cols:3, rows:8, top:0, side:0, gx:0, gy:0};
-  const F = [['w','عرض اللصيقة'],['h','طول اللصيقة'],['cols','عدد الأعمدة (بالعرض)'],['rows','عدد الصفوف (بالطول)'],
-             ['top','الهامش العلوي'],['side','الهامش الجانبي (يمين)'],['gx','الفراغ بين الأعمدة'],['gy','الفراغ بين الصفوف']];
-  const sh = openSheet(`<h3>${orig ? 'تعديل القالب' : 'قالب جديد'}</h3><div class="sub">كل المقاسات بالمليمتر، تقاس بالمسطرة على الورقة الفارغة</div>
-    <div class="solo-box" id="t-pv" style="padding:10px"></div><div id="t-stat"></div>
-    <div class="field"><label>اسم القالب</label><input id="t-name" value="${esc(d.name)}" placeholder="مثلاً: ورق 4 × 10"></div>
-    <div class="two">${F.map(([k,l]) => `<div class="field"><label>${l}${['cols','rows'].includes(k) ? '' : ' (ملم)'}</label>${stepper('t-' + k, d[k], 'sm')}</div>`).join('')}</div>
-    <button class="btn-ghost" id="t-auto">توسيط تلقائي (حساب الهوامش من المقاسات)</button>
-    <h4>كيف تقيس؟</h4><ol class="guide">
-      <li>عرض وطول لصيقة واحدة.</li><li>عُدّ اللصيقات في السطر (الأعمدة) وفي العمود (الصفوف).</li>
-      <li>من حافة الورقة العليا إلى أعلى أول لصيقة = الهامش العلوي.</li><li>من الحافة اليمنى إلى أول لصيقة = الهامش الجانبي.</li>
-      <li>إن كانت اللصيقات ملتصقة ببعضها فالفراغ = 0.</li><li>لا تعرف الهوامش؟ أدخل البقية واضغط «توسيط تلقائي».</li></ol>
-    <div class="actions"><button class="btn-main" id="t-save">حفظ</button><button class="btn-ghost" onclick="closeSheet()">إلغاء</button></div>`);
+  const d = orig ? clone(orig) : {id:uid(), name:'', paper:'A4', pw:210, ph:297, w:70, h:37, cols:3, rows:8, top:0, side:0, gx:0, gy:0};
+  d.pw ??= 210; d.ph ??= 297;
+  const F = [['w','عرض اللصيقة'],['h','طول اللصيقة'],['cols','الأعمدة'],['rows','الصفوف'],['top','الهامش العلوي'],['side','الهامش الأيمن'],['gx','فراغ بين الأعمدة'],['gy','فراغ بين الصفوف']];
+  const sh = openSheet(`<h3>${orig ? 'تعديل القالب' : 'قالب جديد'}</h3>
+    <div class="solo-box" id="t-pv"></div><div id="t-stat"></div>
+    <div class="field"><label>الاسم</label><input class="inp" id="t-name" value="${esc(d.name)}" placeholder="مثلاً: 4 × 10"></div>
+    <div class="field"><label>مقاس الورقة</label>${segHTML('paper', d.paper, [['A4','A4'],['A5','A5'],['custom','مقاس آخر']])}</div>
+    <div class="panel ${d.paper === 'custom' ? '' : 'hidden'}" id="t-custom" style="box-shadow:none">
+      <div class="row"><div class="lbl">عرض الورقة<small>ملم</small></div>${stepper('t-pw', d.pw)}</div>
+      <div class="row"><div class="lbl">طول الورقة<small>ملم</small></div>${stepper('t-ph', d.ph)}</div></div>
+    <h4>اللصيقات (بالملم)</h4>
+    <div class="panel grid2" id="t-fields" style="box-shadow:none">${F.map(([k,l]) => `<div class="row"><div class="lbl">${l}</div>${stepper('t-' + k, d[k])}</div>`).join('')}</div>
+    <button class="btn sm outline" id="t-auto">توسيط الهوامش تلقائياً</button>
+    <details class="help"><summary>كيف أقيس؟</summary><ol>
+      <li>عرض وطول لصيقة واحدة، وعدد الأعمدة والصفوف.</li><li>الهامش العلوي: من حافة الورقة العليا إلى أول لصيقة.</li>
+      <li>الهامش الأيمن: من الحافة اليمنى إلى أول لصيقة.</li><li>لا تعرف الهوامش؟ اضغط «توسيط الهوامش تلقائياً».</li></ol></details>
+    <div class="sheet-foot"><button class="btn primary" id="t-save">حفظ</button><button class="btn outline" onclick="closeSheet()">إلغاء</button></div>`);
   const draw = () => {
-    const box = $('#t-pv', sh), w = Math.min(box.clientWidth - 20, 220);
-    box.innerHTML = sheetThumb(d, w);
-    const usedW = d.side + d.cols * d.w + (d.cols - 1) * d.gx, usedH = d.top + d.rows * d.h + (d.rows - 1) * d.gy;
-    const remW = r2(A4W - usedW), remH = r2(A4H - usedH);
+    const box = $('#t-pv', sh), [pw, ph] = paperWH(d);
+    box.innerHTML = sheetThumb(d, Math.min(150, box.clientWidth - 28));
+    const remW = r2(pw - (d.side + d.cols * d.w + (d.cols - 1) * d.gx)), remH = r2(ph - (d.top + d.rows * d.h + (d.rows - 1) * d.gy));
     $('#t-stat', sh).innerHTML = (remW < -0.01 || remH < -0.01)
-      ? `<div class="notice warn">اللصيقات تخرج عن الورقة: ${remW < 0 ? `زائد ${-remW} ملم في العرض` : ''} ${remH < 0 ? `زائد ${-remH} ملم في الطول` : ''}</div>`
-      : `<div class="notice ok">${perSheet(d)} لصيقة · يبقى <span class="num">${remW}</span> ملم يساراً و <span class="num">${remH}</span> ملم أسفل الورقة</div>`;
+      ? `<div class="note warn">اللصيقات تخرج عن الورقة${remW < 0 ? ` · زائد ${-remW} ملم عرضاً` : ''}${remH < 0 ? ` · زائد ${-remH} ملم طولاً` : ''}</div>`
+      : `<div class="note ok">${perSheet(d)} لصيقة · يبقى ${remW} ملم يساراً و ${remH} ملم أسفل</div>`;
   };
-  bindSteppers(sh, id => ['t-cols','t-rows'].includes(id) ? 1 : 0.5, (id, v) => {
-    const k = id.slice(2), int = ['cols','rows'].includes(k);
-    d[k] = int ? Math.max(1, Math.min(30, Math.round(num(v, 1)))) : Math.max(0, Math.min(k === 'h' ? A4H : A4W, r2(num(v))));
-    if (['w','h'].includes(k)) d[k] = Math.max(5, d[k]);
+  bindSegs(sh, (k, v) => { d.paper = v; $('#t-custom', sh).classList.toggle('hidden', v !== 'custom'); draw(); });
+  bindSteppers(sh, id => ['t-cols','t-rows'].includes(id) ? 1 : (['t-pw','t-ph'].includes(id) ? 1 : 0.5), (id, v) => {
+    const k = id.slice(2);
+    if (k === 'cols' || k === 'rows') d[k] = Math.max(1, Math.min(40, Math.round(num(v, 1))));
+    else if (k === 'pw' || k === 'ph') d[k] = Math.max(30, Math.min(500, r2(num(v, 100))));
+    else d[k] = Math.max(['w','h'].includes(k) ? 5 : 0, Math.min(500, r2(num(v))));
     $('#' + id, sh).value = d[k]; draw();
   });
   $('#t-auto', sh).onclick = () => {
-    d.side = Math.max(0, r2((A4W - d.cols * d.w - (d.cols - 1) * d.gx) / 2));
-    d.top  = Math.max(0, r2((A4H - d.rows * d.h - (d.rows - 1) * d.gy) / 2));
-    $('#t-side', sh).value = d.side; $('#t-top', sh).value = d.top; draw(); toast('حُسبت الهوامش');
+    const [pw, ph] = paperWH(d);
+    d.side = Math.max(0, r2((pw - d.cols * d.w - (d.cols - 1) * d.gx) / 2));
+    d.top  = Math.max(0, r2((ph - d.rows * d.h - (d.rows - 1) * d.gy) / 2));
+    $('#t-side', sh).value = d.side; $('#t-top', sh).value = d.top; draw();
   };
   $('#t-save', sh).onclick = () => {
-    d.name = $('#t-name', sh).value.trim() || `ورق ${d.cols} × ${d.rows} — ${d.w}×${d.h}`;
+    d.name = $('#t-name', sh).value.trim() || `${d.cols} × ${d.rows} — ${d.w}×${d.h}`;
     if (orig) D.tpls[D.tpls.indexOf(orig)] = d; else D.tpls.push(d);
-    save(); closeSheet(); toast('حُفظ القالب'); goTab(S.tab);
+    save(); closeSheet(); toast('حُفظ'); goTab(S.tab);
   };
   draw();
 }
 
-/* ═══════════ القائمة ═══════════ */
+/* ═══════════ الإعدادات ═══════════ */
 function openMenu(){
   let t = 'auto'; try { t = localStorage.getItem('lsq_theme') || 'auto'; } catch(e){}
-  openSheet(`<h3>القائمة</h3>
-    <div class="field"><label>المظهر</label><div class="seg" id="m-theme">${[['light','فاتح'],['dark','ليلي'],['auto','تلقائي']].map(([k,l]) => `<button data-t="${k}" class="${k === t ? 'on' : ''}">${l}</button>`).join('')}</div></div>
-    <h4>معايرة الطابعة</h4><div class="sub" style="margin-bottom:8px">اطبع «ورقة اختبار» على ورق عادي وضعها فوق الورق اللاصق أمام الضوء. إن كانت الطباعة مزاحة، صحّحها هنا (تُطبَّق على كل الطباعات).</div>
-    <div class="prow"><div class="grow">أفقي (ملم)<small>موجب = نحو اليمين</small></div>${stepper('m-cx', D.cal.x, 'sm')}</div>
-    <div class="prow"><div class="grow">عمودي (ملم)<small>موجب = نحو الأسفل</small></div>${stepper('m-cy', D.cal.y, 'sm')}</div>
-    <h4>نسخة احتياطية</h4><div class="sub" style="margin-bottom:8px">القوالب والمحتويات محفوظة في هذا المتصفح فقط. انقلها لجهاز آخر بملف.</div>
-    <div class="actions" style="margin-top:0">
-      <button class="btn-ghost" id="m-exp">تصدير ملف النسخة</button>
-      <button class="btn-ghost" id="m-imp">استيراد ملف نسخة</button><input type="file" id="m-file" accept=".json,application/json" class="hidden">
-      ${canInstall() ? `<button class="btn-ghost" id="m-inst">ثبّت التطبيق على الجهاز</button>` : ''}
-      <button class="btn-main" onclick="closeSheet()">إغلاق</button></div>`, sh => {
-    $$('#m-theme button', sh).forEach(b => b.onclick = () => {
-      try { localStorage.setItem('lsq_theme', b.dataset.t); } catch(e){}
-      applyTheme(); $$('#m-theme button', sh).forEach(x => x.classList.toggle('on', x === b));
-    });
+  openSheet(`<h3>الإعدادات</h3>
+    <div class="field"><label>المظهر</label>${segHTML('theme', t, [['light','فاتح'],['dark','ليلي'],['auto','تلقائي']])}</div>
+    <h4>معايرة الطابعة (ملم)</h4>
+    <div class="panel" style="box-shadow:none">
+      <div class="row"><div class="lbl">أفقي<small>موجب = نحو اليمين</small></div>${stepper('m-cx', D.cal.x)}</div>
+      <div class="row"><div class="lbl">عمودي<small>موجب = نحو الأسفل</small></div>${stepper('m-cy', D.cal.y)}</div>
+    </div>
+    <details class="help"><summary>كيف أعاير؟</summary><ol><li>من نافذة الطباعة اطبع «ورقة اختبار» على ورق عادي.</li>
+      <li>ضعها فوق الورق اللاصق أمام الضوء.</li><li>إن كانت الإطارات مزاحة، صحّح هنا بنفس المقدار.</li></ol></details>
+    <h4>نسخة احتياطية</h4>
+    <div class="btns"><button class="btn sm outline" id="m-exp">تصدير</button><button class="btn sm outline" id="m-imp">استيراد</button>
+      ${canInstall() ? `<button class="btn sm outline" id="m-inst">تثبيت التطبيق</button>` : ''}</div>
+    <input type="file" id="m-file" accept=".json,application/json" class="hidden">
+    <div class="sheet-foot"><button class="btn outline" onclick="closeSheet()">إغلاق</button></div>`, sh => {
+    bindSegs(sh, (k, v) => { try { localStorage.setItem('lsq_theme', v); } catch(e){} applyTheme(); });
     bindSteppers(sh, 0.5, (id, v) => { const k = id === 'm-cx' ? 'x' : 'y'; D.cal[k] = Math.max(-15, Math.min(15, r2(num(v)))); $('#' + id, sh).value = D.cal[k]; save(); });
     $('#m-exp', sh).onclick = () => {
-      const blob = new Blob([JSON.stringify({app:'lasiqat', v:1, data:D}, null, 1)], {type:'application/json'});
+      const blob = new Blob([JSON.stringify({app:'lasiqat', v:2, data:D}, null, 1)], {type:'application/json'});
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
       a.download = `lasiqat-${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 2000);
@@ -792,8 +762,8 @@ function openMenu(){
       try {
         const j = JSON.parse(await f.text()), nd = j.data || j;
         if (!Array.isArray(nd.tpls) || !nd.tpls.length || !Array.isArray(nd.items)) throw 0;
-        if (!(await confirmBox('استيراد النسخة', `${nd.tpls.length} قالب و ${nd.items.length} محتوى. ستحل محل البيانات الحالية.`, 'استيراد'))) return;
-        D = Object.assign({queue:[], start:1, border:false, cal:{x:0, y:0}}, nd);
+        if (!(await confirmBox('استيراد', `${nd.tpls.length} قالب و ${nd.items.length} محتوى. ستحل محل البيانات الحالية.`, 'استيراد'))) return;
+        D = Object.assign({queue:[], start:1, border:false, cal:{x:0, y:0}}, nd); normalize();
         if (!tplById(D.tplId)) D.tplId = D.tpls[0].id;
         save(); toast('تم الاستيراد'); goTab('print');
       } catch(err){ toast('الملف غير صالح', true); }
@@ -803,8 +773,7 @@ function openMenu(){
 }
 
 /* ═══════════ البدء ═══════════ */
-renderShell();
-goTab('print');
+renderShell(); renderHead(); goTab('print');
 document.fonts && document.fonts.ready.then(() => { if (S.tab === 'print') drawPreview(); else if (S.tab === 'items') fitAll($('#main')); });
 </script>
 </body>
