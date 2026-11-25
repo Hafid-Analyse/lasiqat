@@ -267,6 +267,7 @@ const IC = {
   copy:  svg('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>'),
   trash: svg('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
   fill:  svg('<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/><path d="M14 14h4v4h-4z" fill="currentColor"/>'),
+  image: svg('<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8.5 8.5"/>'),
   up:    svg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
   x:     svg('<path d="M7 7l10 10M17 7L7 17"/>'),
   right: svg('<path d="M9 6l6 6-6 6"/>'),
@@ -303,7 +304,7 @@ let D = LS.get('lsq_data') || seed();
 function normalize(){
   D.tpls ||= []; D.items ||= []; D.queue ||= []; D.cal ||= {x:0, y:0}; D.start ||= 1;
   if (!D.tpls.length) D = seed();
-  D.tpls.forEach(t => { t.paper ||= 'A4'; });
+  D.tpls.forEach(t => { t.paper ||= 'A4'; t.feed ||= 'a4'; });
   D.items.forEach(i => { i.rot = +i.rot || 0; i.lgap ??= 0; });
 }
 normalize();
@@ -314,6 +315,7 @@ const itemById = id => D.items.find(i => i.id === id);
 const fontOf = k => FONTS.find(f => f.k === k) || FONTS[0];
 const perSheet = T => T.cols * T.rows;
 const paperWH = T => T.paper === 'custom' ? [num(T.pw, 210), num(T.ph, 297)] : (PAPERS[T.paper] || PAPERS.A4);
+const feedA4 = T => { const [pw, ph] = paperWH(T); return T.paper !== 'A4' && (T.feed || 'a4') === 'a4' && pw <= 210 && ph <= 297; };
 const paperName = T => T.paper === 'custom' ? `${paperWH(T).join('×')} ملم` : T.paper;
 
 let S = { tab:'print', page:0 };
@@ -349,7 +351,11 @@ function pageHTML(T, cells, mode, pageNo=0){
     if (c && c !== 'skip') h += `<div class="lb${D.border ? ' bd' : ''}${click}" data-i="${i}" style="${base}">${boxHTML(c, T)}</div>`;
     else if (mode === 'preview') h += `<div class="lb ${c === 'skip' ? 'skip' : 'empty'}${click}" data-i="${i}" style="${base}"></div>`;
   }
-  return `<div class="page" style="width:${pw}mm;height:${r2(ph - 0.2)}mm"><div class="page-in" style="${shift}">${h}</div></div>`;
+  const inner = `<div class="page-in" style="${shift}">${h}</div>`;
+  /* ورقة صغيرة تُطبع على إعداد A4: تُرسم في وسط الصفحة أفقياً وملاصقة للأعلى (مثل موضعها في درج الطابعة) */
+  if ((mode === 'print' || mode === 'test') && feedA4(T))
+    return `<div class="page" style="width:210mm;height:296.8mm"><div style="position:absolute;top:0;right:${r2((210 - pw) / 2)}mm;width:${pw}mm;height:${ph}mm;overflow:hidden">${inner}</div></div>`;
+  return `<div class="page" style="width:${pw}mm;height:${r2(ph - 0.2)}mm">${inner}</div>`;
 }
 function innerFree(box){
   const cs = getComputedStyle(box);
@@ -558,22 +564,92 @@ function openPrintSheet(){
   const c = buildCells();
   if (!c.count) return toast('أضف محتوى للطباعة أولاً', true);
   openSheet(`<h3>طباعة</h3><p class="txt">${c.count} لصيقة · ${c.pages} ${c.pages > 1 ? 'أوراق' : 'ورقة'} ${paperName(c.T)}</p>
-    <div class="note ok">في نافذة الطباعة: الورق <b>${paperName(c.T)}</b> · المقياس <b>100%</b> · الهوامش <b>بلا</b></div>
-    <div class="panel"><label class="row switch"><div class="lbl">إطار حول كل لصيقة<small>للطباعة على ورق عادي ثم القص</small></div><input type="checkbox" id="pr-bd" ${D.border ? 'checked' : ''}></label></div>
-    <div class="sheet-foot"><button class="btn primary" id="pr-go">${IC.print}اطبع</button><button class="btn outline" id="pr-test">ورقة اختبار</button></div>`, sh => {
+    <div class="note ok">في نافذة الطباعة: الورق <b>${feedA4(c.T) ? 'A4' : paperName(c.T)}</b> · المقياس <b>100%</b> · الهوامش <b>بلا</b>${feedA4(c.T) ? `<br>ضع ورقة ${paperName(c.T)} في وسط الدرج بين الموجّهين` : ''}</div>
+    <div class="panel"><label class="row switch"><div class="lbl">إطار حول كل لصيقة<small>للطباعة على ورق عادي ثم القص</small></div><input type="checkbox" id="pr-bd" ${D.border ? 'checked' : ''}></label>
+      <div class="row"><div class="lbl">ورقة اختبار<small>إطارات مرقّمة للمعايرة</small></div><button class="btn sm outline" id="pr-test">اطبع</button></div></div>
+    <div class="sheet-foot"><button class="btn primary" id="pr-go">${IC.print}اطبع</button><button class="btn outline" id="pr-img">${IC.image}صورة</button></div>`, sh => {
     $('#pr-bd', sh).onchange = e => { D.border = e.target.checked; save(); drawPreview(); };
     $('#pr-go', sh).onclick = () => { closeSheet(); doPrint('print'); };
     $('#pr-test', sh).onclick = () => { closeSheet(); doPrint('test'); };
+    $('#pr-img', sh).onclick = e => downloadImages(e.currentTarget);
   });
 }
 async function doPrint(mode){
-  const c = buildCells(), pa = $('#print-area'), [pw, ph] = paperWH(c.T);
+  const c = buildCells(), pa = $('#print-area'), [pw, ph] = feedA4(c.T) ? [210, 297] : paperWH(c.T);
   $('#page-size').textContent = `@media print{@page{size:${pw}mm ${ph}mm;margin:0}}`;
   if (mode === 'test') pa.innerHTML = pageHTML(c.T, [], 'test');
   else { let h = ''; for (let p = 0; p < c.pages; p++) h += pageHTML(c.T, c.cells.slice(p * c.per, (p + 1) * c.per), 'print'); pa.innerHTML = h; }
   try { await document.fonts.ready; } catch(e){}
   fitAll(pa);
   setTimeout(() => window.print(), 60);
+}
+/* ═══════════ التنزيل كصورة PNG بدقة 300 نقطة/بوصة ═══════════ */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++){ let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+/* كتابة الدقة داخل ملف PNG حتى يُطبع بمقاسه الحقيقي من أي برنامج صور */
+async function pngWithDpi(blob, dpi){
+  const src = new Uint8Array(await blob.arrayBuffer()), ppm = Math.round(dpi / 0.0254);
+  const chunk = new Uint8Array(21), dv = new DataView(chunk.buffer);
+  dv.setUint32(0, 9); chunk.set([0x70,0x48,0x59,0x73], 4); dv.setUint32(8, ppm); dv.setUint32(12, ppm); chunk[16] = 1;
+  dv.setUint32(17, crc32(chunk.subarray(4, 17)));
+  const out = new Uint8Array(src.length + 21);
+  out.set(src.subarray(0, 33)); out.set(chunk, 33); out.set(src.subarray(33), 54);
+  return new Blob([out], {type:'image/png'});
+}
+function saveBlob(blob, name){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+/* رسم ورقة كاملة على لوحة canvas بالمليمتر الحقيقي (بدون مكتبات) */
+async function drawPageCanvas(T, cells, dpi){
+  const [pw, ph] = paperWH(T), u = dpi / 25.4, pt = dpi / 72;
+  const cv = document.createElement('canvas');
+  cv.width = Math.round(pw * u); cv.height = Math.round(ph * u);
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+  const fontStr = (l, k) => `${l.b ? 700 : 400} ${num(l.s,12) * k * pt}px ${fontOf(l.f).css}, 'IBM Plex Sans Arabic', sans-serif`;
+  const used = new Set(); cells.forEach(c => c && c !== 'skip' && c.lines.forEach(l => used.add(fontStr(l, 1))));
+  await Promise.all([...used].map(f => document.fonts.load(f, 'ابجد abc').catch(() => {})));
+  for (let i = 0; i < perSheet(T); i++){
+    const it = cells[i]; if (!it || it === 'skip') continue;
+    const {x, y} = cellPos(T, i), left = (pw - x - T.w) * u, top = y * u, w = T.w * u, h = T.h * u;
+    const rot = +it.rot || 0, bw = rot ? h : w, bh = rot ? w : h, pad = num(it.pad, 2) * u, gap = num(it.lgap) * u, lh = it.lh || 1.25;
+    const measure = k => { let mw = 0, th = 0; it.lines.forEach((l, j) => { ctx.font = fontStr(l, k); mw = Math.max(mw, ctx.measureText(l.t || ' ').width); th += num(l.s,12) * k * pt * lh + (j ? gap * k : 0); }); return [mw, th]; };
+    let k = 1, [mw, th] = measure(1);
+    const aw = bw - 2 * pad, ah = bh - 2 * pad;
+    if (it.fit){ const r = Math.min(1, aw / mw, ah / th); if (r < 1){ k = r * 0.97; [mw, th] = measure(k); } }
+    ctx.save();
+    ctx.translate(left + w / 2, top + h / 2); ctx.rotate(rot * Math.PI / 180);
+    ctx.beginPath(); ctx.rect(-bw / 2, -bh / 2, bw, bh); ctx.clip();
+    let cy = it.valign === 't' ? -bh / 2 + pad : it.valign === 'b' ? bh / 2 - pad - th : -th / 2;
+    const al = it.align || 'c', tx = al === 'r' ? bw / 2 - pad : al === 'l' ? -bw / 2 + pad : 0;
+    ctx.fillStyle = '#111'; ctx.textBaseline = 'middle'; ctx.textAlign = al === 'r' ? 'right' : al === 'l' ? 'left' : 'center';
+    it.lines.forEach((l, j) => {
+      const fs = num(l.s,12) * k * pt, lhPx = fs * lh;
+      if (j) cy += gap * k;
+      ctx.font = fontStr(l, k); ctx.direction = /[؀-ۿ]/.test(l.t) ? 'rtl' : 'ltr';
+      if (l.t) ctx.fillText(l.t, tx, cy + lhPx / 2);
+      cy += lhPx;
+    });
+    ctx.restore();
+    if (D.border){ ctx.strokeStyle = '#000'; ctx.lineWidth = 0.25 * u; ctx.strokeRect(left + 0.125 * u, top + 0.125 * u, w - 0.25 * u, h - 0.25 * u); }
+  }
+  return cv;
+}
+async function downloadImages(btn){
+  const c = buildCells();
+  if (btn){ btn.disabled = true; btn.lastChild.textContent = 'جارٍ…'; }
+  try {
+    const base = (c.T.name || 'lasiqat').replace(/[\\/:*?"<>|]+/g, '-').trim();
+    for (let p = 0; p < c.pages; p++){
+      const cv = await drawPageCanvas(c.T, c.cells.slice(p * c.per, (p + 1) * c.per), 300);
+      const blob = await pngWithDpi(await new Promise(r => cv.toBlob(r, 'image/png')), 300);
+      saveBlob(blob, c.pages > 1 ? `${base} - ${p + 1}.png` : `${base}.png`);
+      await new Promise(r => setTimeout(r, 400));
+    }
+    toast(c.pages > 1 ? `نُزّلت ${c.pages} صور` : 'نُزّلت الصورة');
+  } catch(err){ toast('تعذّر إنشاء الصورة', true); }
+  finally { if (btn){ btn.disabled = false; btn.lastChild.textContent = 'صورة'; } }
 }
 window.addEventListener('afterprint', () => { $('#print-area').innerHTML = ''; });
 
@@ -684,13 +760,14 @@ function renderTpls(){
 }
 function editTpl(id){
   const orig = id && tplById(id);
-  const d = orig ? clone(orig) : {id:uid(), name:'', paper:'A4', pw:210, ph:297, w:70, h:37, cols:3, rows:8, top:0, side:0, gx:0, gy:0};
+  const d = orig ? clone(orig) : {id:uid(), name:'', paper:'A4', feed:'a4', pw:210, ph:297, w:70, h:37, cols:3, rows:8, top:0, side:0, gx:0, gy:0};
   d.pw ??= 210; d.ph ??= 297;
   const F = [['w','عرض اللصيقة'],['h','طول اللصيقة'],['cols','الأعمدة'],['rows','الصفوف'],['top','الهامش العلوي'],['side','الهامش الأيمن'],['gx','فراغ بين الأعمدة'],['gy','فراغ بين الصفوف']];
   const sh = openSheet(`<h3>${orig ? 'تعديل القالب' : 'قالب جديد'}</h3>
     <div class="solo-box" id="t-pv"></div><div id="t-stat"></div>
     <div class="field"><label>الاسم</label><input class="inp" id="t-name" value="${esc(d.name)}" placeholder="مثلاً: 4 × 10"></div>
     <div class="field"><label>مقاس الورقة</label>${segHTML('paper', d.paper, [['A4','A4'],['A5','A5'],['custom','مقاس آخر']])}</div>
+    <div class="field ${d.paper === 'A4' ? 'hidden' : ''}" id="t-feed"><label>عند الطباعة</label>${segHTML('feed', d.feed || 'a4', [['a4','داخل إعداد A4 (في الوسط)'],['native','بمقاسها الخاص']])}</div>
     <div class="panel ${d.paper === 'custom' ? '' : 'hidden'}" id="t-custom" style="box-shadow:none">
       <div class="row"><div class="lbl">عرض الورقة<small>ملم</small></div>${stepper('t-pw', d.pw)}</div>
       <div class="row"><div class="lbl">طول الورقة<small>ملم</small></div>${stepper('t-ph', d.ph)}</div></div>
@@ -708,8 +785,13 @@ function editTpl(id){
     $('#t-stat', sh).innerHTML = (remW < -0.01 || remH < -0.01)
       ? `<div class="note warn">اللصيقات تخرج عن الورقة${remW < 0 ? ` · زائد ${-remW} ملم عرضاً` : ''}${remH < 0 ? ` · زائد ${-remH} ملم طولاً` : ''}</div>`
       : `<div class="note ok">${perSheet(d)} لصيقة · يبقى ${remW} ملم يساراً و ${remH} ملم أسفل</div>`;
+    if (d.paper !== 'A4' && (d.feed || 'a4') === 'a4' && (pw > 210 || ph > 297)) $('#t-stat', sh).innerHTML += `<div class="note warn">الورقة أكبر من A4، ستُطبع بمقاسها الخاص</div>`;
   };
-  bindSegs(sh, (k, v) => { d.paper = v; $('#t-custom', sh).classList.toggle('hidden', v !== 'custom'); draw(); });
+  bindSegs(sh, (k, v) => {
+    d[k] = v;
+    if (k === 'paper'){ $('#t-custom', sh).classList.toggle('hidden', v !== 'custom'); $('#t-feed', sh).classList.toggle('hidden', v === 'A4'); }
+    draw();
+  });
   bindSteppers(sh, id => ['t-cols','t-rows'].includes(id) ? 1 : (['t-pw','t-ph'].includes(id) ? 1 : 0.5), (id, v) => {
     const k = id.slice(2);
     if (k === 'cols' || k === 'rows') d[k] = Math.max(1, Math.min(40, Math.round(num(v, 1))));
