@@ -154,9 +154,10 @@ details.help ol{margin:4px 0 0;padding-inline-start:18px}
 .lb-box{position:absolute;left:50%;top:50%;display:flex;flex-direction:column;overflow:hidden;color:#111}
 .lb-in{flex:none;width:max-content;min-width:100%}
 .ln{white-space:pre}
-.pv .lb{outline:.3mm dashed #D2C29A;outline-offset:-.3mm}
-.pv .lb.empty{background:#FBF9F3}
-.pv .lb.skip{background:repeating-linear-gradient(45deg,#EEE6D4 0 2mm,#fff 2mm 4mm)}
+.pv .lb{outline:.45mm solid #1A1A1A;outline-offset:-.225mm}
+.pv .lb.empty{background:#F3F3F3}
+.pv .lb.skip{background:repeating-linear-gradient(45deg,#B5B5B5 0 1.6mm,#fff 1.6mm 3.6mm)}
+.sheet-wrap .page,.thumb{box-shadow:0 0 0 1px #9A9A9A,0 8px 18px -12px rgba(0,0,0,.5)}
 .pv .lb.click{cursor:pointer}
 .lb.bd{box-shadow:inset 0 0 0 .25mm #000}
 .lb.test{box-shadow:inset 0 0 0 .25mm #000;display:grid;place-items:center;font:700 13pt 'IBM Plex Sans Arabic',sans-serif;color:#666}
@@ -164,6 +165,29 @@ details.help ol{margin:4px 0 0;padding-inline-start:18px}
 .pv-head b{font-weight:600;color:var(--muted);font-size:14px}
 .pager{display:flex;align-items:center;gap:8px;font-size:14px}
 .pv-panel{padding:4px 14px 14px}
+/* ── معالج القوالب ── */
+.wz-top{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--green)}
+.dots i.now{width:22px;border-radius:6px;background:var(--gold)}
+.wz-art{display:grid;place-items:center;background:var(--soft);border:1px solid var(--line);border-radius:14px;height:clamp(220px,38vh,320px);padding:12px;margin-bottom:14px}
+.wz-art svg{width:100%;height:100%}
+.wz-q{font-size:19px;font-weight:600;text-align:center;margin:0 0 12px}
+.big-stp{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
+.big-stp button{width:56px;height:56px;border-radius:16px;font-size:28px;color:var(--green-ink);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+[data-theme="light"] .big-stp button{color:var(--green)}
+.big-stp input{width:110px;height:56px;border-radius:14px;border:2px solid var(--gold);background:var(--card);text-align:center;font-size:28px;font-weight:700}
+.big-stp input:focus{outline:none}
+.wz-unit{text-align:center;font-size:13px;color:var(--muted);margin:-4px 0 10px;display:flex;justify-content:center;gap:6px;align-items:center}
+.wz-unit svg{width:16px;height:16px}
+.wz-alt{display:flex;justify-content:center;margin-bottom:6px}
+.papers{display:flex;justify-content:center;align-items:flex-end;gap:18px}
+.paper-opt{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;color:var(--muted)}
+.paper-opt span.pg{display:block;background:#fff;border:2px solid #9A9A9A;border-radius:3px}
+.paper-opt.on{color:var(--green-ink)}
+[data-theme="light"] .paper-opt.on{color:var(--green)}
+.paper-opt.on span.pg{border-color:#D93636;box-shadow:0 0 0 3px rgba(217,54,54,.2)}
 .solo-box{display:grid;place-items:center;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;min-height:110px}
 .solo{position:relative;flex:none;box-shadow:0 0 0 1px #D8C9A4,0 8px 16px -12px rgba(0,0,0,.5);border-radius:2px;overflow:hidden;background:#fff}
 .solo .lb{top:0;right:0;transform-origin:top right}
@@ -268,6 +292,9 @@ const IC = {
   trash: svg('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
   fill:  svg('<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/><path d="M14 14h4v4h-4z" fill="currentColor"/>'),
   image: svg('<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8.5 8.5"/>'),
+  ruler: svg('<rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6 8v3M9.5 8v4M13 8v3M16.5 8v4"/>'),
+  next:  svg('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+  prev:  svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
   up:    svg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
   x:     svg('<path d="M7 7l10 10M17 7L7 17"/>'),
   right: svg('<path d="M9 6l6 6-6 6"/>'),
@@ -741,7 +768,7 @@ function renderTpls(){
       <div class="info"><b>${esc(T.name)}</b><small>${paperName(T)} · <span class="num">${T.w}×${T.h}</span> ملم · ${perSheet(T)} لصيقة</small>
       <div class="btns">${T.id === D.tplId ? `<span class="meta" style="padding:0">المستعمل حالياً</span>` : `<button class="btn sm outline" data-a="use">استعمله</button>`}<span style="flex:1"></span>
       <button class="ibtn" data-a="edit" aria-label="تعديل">${IC.edit}</button><button class="ibtn" data-a="dup" aria-label="نسخ">${IC.copy}</button><button class="ibtn danger" data-a="del" aria-label="حذف">${IC.trash}</button></div></div></div>`).join('')}</div>`;
-  $('#t-new').onclick = () => editTpl(null);
+  $('#t-new').onclick = () => tplWizard(null);
   $$('.card[data-id] [data-a]').forEach(b => b.onclick = async () => {
     const id = b.closest('[data-id]').dataset.id, T = tplById(id), a = b.dataset.a;
     if (a === 'edit') editTpl(id);
@@ -774,6 +801,7 @@ function editTpl(id){
     <h4>اللصيقات (بالملم)</h4>
     <div class="panel grid2" id="t-fields" style="box-shadow:none">${F.map(([k,l]) => `<div class="row"><div class="lbl">${l}</div>${stepper('t-' + k, d[k])}</div>`).join('')}</div>
     <button class="btn sm outline" id="t-auto">توسيط الهوامش تلقائياً</button>
+    ${orig ? `<button class="btn sm outline" id="t-wz" style="margin-inline-start:6px">فتح المعالج خطوة بخطوة</button>` : ''}
     <details class="help"><summary>كيف أقيس؟</summary><ol>
       <li>عرض وطول لصيقة واحدة، وعدد الأعمدة والصفوف.</li><li>الهامش العلوي: من حافة الورقة العليا إلى أول لصيقة.</li>
       <li>الهامش الأيمن: من الحافة اليمنى إلى أول لصيقة.</li><li>لا تعرف الهوامش؟ اضغط «توسيط الهوامش تلقائياً».</li></ol></details>
@@ -805,11 +833,127 @@ function editTpl(id){
     d.top  = Math.max(0, r2((ph - d.rows * d.h - (d.rows - 1) * d.gy) / 2));
     $('#t-side', sh).value = d.side; $('#t-top', sh).value = d.top; draw();
   };
+  if ($('#t-wz', sh)) $('#t-wz', sh).onclick = () => { d.name = $('#t-name', sh).value.trim() || d.name; tplWizard(orig, d); };
   $('#t-save', sh).onclick = () => {
     d.name = $('#t-name', sh).value.trim() || `${d.cols} × ${d.rows} — ${d.w}×${d.h}`;
     if (orig) D.tpls[D.tpls.indexOf(orig)] = d; else D.tpls.push(d);
     save(); closeSheet(); toast('حُفظ'); goTab(S.tab);
   };
+  draw();
+}
+
+/* ═══════════ معالج القوالب بالرسم ═══════════ */
+const RED = '#D93636';
+function wzSheetSVG(d, hl){
+  const [pw, ph] = paperWH(d), m = Math.max(pw, ph) * 0.05, sw = Math.max(pw, ph) / 260;
+  const X = c => pw - d.side - c * (d.w + d.gx) - d.w;          /* يسار العمود c (العمود 0 على اليمين) */
+  const Y = r => d.top + r * (d.h + d.gy);
+  const arrow = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${RED}" stroke-width="${sw*2.2}" marker-start="url(#wa)" marker-end="url(#wa)"/>`;
+  let g = '';
+  const rows = Math.min(d.rows, 60), cols = Math.min(d.cols, 40);
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++){
+    const on = (hl === 'cols' && r === 0) || (hl === 'rows' && c === 0);
+    g += `<rect x="${X(c)}" y="${Y(r)}" width="${d.w}" height="${d.h}" fill="${on ? 'rgba(217,54,54,.28)' : '#fff'}" stroke="${on ? RED : '#1A1A1A'}" stroke-width="${sw*(on?2:1.2)}"/>`;
+  }
+  let ov = '';
+  if (hl === 'top'){ ov = `<rect x="0" y="0" width="${pw}" height="${Math.max(d.top, sw*2)}" fill="rgba(217,54,54,.35)"/>` + arrow(pw/2, 0, pw/2, Math.max(d.top, sw*22)); }
+  if (hl === 'side'){ ov = `<rect x="${pw - Math.max(d.side, sw*2)}" y="0" width="${Math.max(d.side, sw*2)}" height="${ph}" fill="rgba(217,54,54,.35)"/>` + arrow(pw, ph/2, pw - Math.max(d.side, sw*22), ph/2); }
+  if (hl === 'gx' && d.cols > 1){ const x = X(0) - d.gx; ov = `<rect x="${x - (d.gx ? 0 : sw*1.5)}" y="0" width="${Math.max(d.gx, sw*3)}" height="${ph}" fill="rgba(217,54,54,.35)"/>`; }
+  if (hl === 'gy' && d.rows > 1){ const y = Y(0) + d.h; ov = `<rect x="0" y="${y - (d.gy ? 0 : sw*1.5)}" width="${pw}" height="${Math.max(d.gy, sw*3)}" fill="rgba(217,54,54,.35)"/>`; }
+  return `<svg viewBox="${-m} ${-m} ${pw + 2*m} ${ph + 2*m}" preserveAspectRatio="xMidYMid meet">
+    <defs><marker id="wa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${RED}"/></marker></defs>
+    <rect x="0" y="0" width="${pw}" height="${ph}" fill="#fff" stroke="#8A8A8A" stroke-width="${sw*1.5}"/>
+    <clipPath id="wc"><rect x="0" y="0" width="${pw}" height="${ph}"/></clipPath><g clip-path="url(#wc)">${g}${ov}</g></svg>`;
+}
+function wzLabelSVG(d, hl){
+  const W = d.w, H = d.h, p = Math.max(W, H) * 0.32, sw = Math.max(W, H) / 120, fs = Math.max(W, H) / 9;
+  const ar = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${RED}" stroke-width="${sw*1.6}" marker-start="url(#la)" marker-end="url(#la)"/>`;
+  const tag = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="${fs}" font-weight="700" fill="${RED}" font-family="IBM Plex Sans Arabic,sans-serif" paint-order="stroke" stroke="#fff" stroke-width="${fs/4}">${t}</text>`;
+  let ov = '';
+  if (hl === 'w') ov = ar(0, -p*0.45, W, -p*0.45) + tag(W/2, -p*0.45, `${d.w} ملم`);
+  if (hl === 'h') ov = ar(W + p*0.45, 0, W + p*0.45, H) + `<g transform="rotate(-90 ${W + p*0.45} ${H/2})">${tag(W + p*0.45, H/2, `${d.h} ملم`)}</g>`;
+  return `<svg viewBox="${-p} ${-p} ${W + 2*p} ${H + 2*p}" preserveAspectRatio="xMidYMid meet">
+    <defs><marker id="la" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3" markerHeight="3" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${RED}"/></marker></defs>
+    <rect x="0" y="0" width="${W}" height="${H}" rx="${sw*2}" fill="#fff" stroke="${hl === 'w' || hl === 'h' ? '#1A1A1A' : RED}" stroke-width="${sw*1.6}"/>
+    <line x1="${W*0.25}" y1="${H*0.42}" x2="${W*0.75}" y2="${H*0.42}" stroke="#C8C8C8" stroke-width="${sw*2.5}" stroke-linecap="round"/>
+    <line x1="${W*0.33}" y1="${H*0.62}" x2="${W*0.67}" y2="${H*0.62}" stroke="#DCDCDC" stroke-width="${sw*2}" stroke-linecap="round"/>
+    ${hl === 'w' ? `<line x1="0" y1="0" x2="${W}" y2="0" stroke="${RED}" stroke-width="${sw*2.4}"/>` : ''}
+    ${hl === 'h' ? `<line x1="${W}" y1="0" x2="${W}" y2="${H}" stroke="${RED}" stroke-width="${sw*2.4}"/>` : ''}${ov}</svg>`;
+}
+function tplWizard(orig, start){
+  const d = start ? clone(start) : orig ? clone(orig) : {id:uid(), name:'', paper:'A4', feed:'a4', pw:210, ph:297, w:70, h:37, cols:3, rows:8, top:0, side:0, gx:0, gy:0};
+  d.pw ??= 210; d.ph ??= 297;
+  const STEPS = [
+    {k:'paper', q:'ما مقاس الورقة؟'},
+    {k:'w', q:'عرض اللصيقة', art:'label', st:0.5, mn:5},
+    {k:'h', q:'طول اللصيقة', art:'label', st:0.5, mn:5},
+    {k:'cols', q:'كم لصيقة في الصف؟', st:1, mn:1, int:true},
+    {k:'rows', q:'كم لصيقة في العمود؟', st:1, mn:1, int:true},
+    {k:'gx', q:'الفراغ بين الأعمدة', st:0.5, mn:0, alt:'ملتصقة', skip:() => d.cols < 2},
+    {k:'gy', q:'الفراغ بين الصفوف', st:0.5, mn:0, alt:'ملتصقة', skip:() => d.rows < 2},
+    {k:'top', q:'الهامش العلوي', st:0.5, mn:0, alt:'لا أعرف'},
+    {k:'side', q:'الهامش الجانبي', st:0.5, mn:0, alt:'لا أعرف'},
+    {k:'done', q:'هكذا ستكون الورقة'}
+  ];
+  let i = 0;
+  const sh = openSheet(`<div id="wz"></div>`);
+  const go = dir => { do { i += dir; } while (STEPS[i] && STEPS[i].skip && STEPS[i].skip()); i = Math.max(0, Math.min(STEPS.length - 1, i)); draw(); };
+  const art = () => {
+    const S = STEPS[i];
+    if (S.k === 'paper') return '';
+    return S.art === 'label' ? wzLabelSVG(d, S.k) : wzSheetSVG(d, S.k === 'done' ? '' : S.k);
+  };
+  function draw(){
+    const S = STEPS[i], n = STEPS.length;
+    const dots = STEPS.map((_, j) => `<i class="${j < i ? 'done' : j === i ? 'now' : ''}"></i>`).join('');
+    let body = '';
+    if (S.k === 'paper'){
+      const opt = (v, l, w, h) => `<button class="paper-opt ${d.paper === v ? 'on' : ''}" data-p="${v}"><span class="pg" style="width:${w}px;height:${h}px"></span>${l}</button>`;
+      body = `<div class="wz-art"><div class="papers">${opt('A4','A4',84,119)}${opt('A5','A5',60,84)}${opt('custom','✎',70,100)}</div></div>
+        <p class="wz-q">${S.q}</p>
+        <div class="${d.paper === 'custom' ? '' : 'hidden'}" id="wz-custom"><div class="panel" style="box-shadow:none">
+          <div class="row"><div class="lbl">↔ عرض الورقة</div>${stepper('wz-pw', d.pw)}</div><div class="row"><div class="lbl">↕ طول الورقة</div>${stepper('wz-ph', d.ph)}</div></div></div>`;
+    } else if (S.k === 'done'){
+      const [pw, ph] = paperWH(d);
+      const remW = r2(pw - (d.side + d.cols * d.w + (d.cols - 1) * d.gx)), remH = r2(ph - (d.top + d.rows * d.h + (d.rows - 1) * d.gy));
+      const bad = remW < -0.01 || remH < -0.01;
+      body = `<div class="wz-art" id="wz-art">${art()}</div>
+        <div class="note ${bad ? 'warn' : 'ok'}" style="text-align:center">${bad ? 'اللصيقات تخرج عن الورقة: ارجع وصحّح المقاسات' : `${perSheet(d)} لصيقة في الورقة ✓`}</div>
+        <div class="field"><label>اسم القالب</label><input class="inp" id="wz-name" value="${esc(d.name)}" placeholder="${esc(`${d.cols} × ${d.rows} — ${d.w}×${d.h}`)}"></div>`;
+    } else {
+      body = `<div class="wz-art" id="wz-art">${art()}</div><p class="wz-q">${S.q}</p>
+        <div class="big-stp"><button data-d="1" aria-label="زيادة">+</button><input id="wz-v" class="num" inputmode="decimal" value="${d[S.k]}"><button data-d="-1" aria-label="إنقاص">−</button></div>
+        ${S.int ? '' : `<div class="wz-unit">${IC.ruler}بالملم</div>`}
+        ${S.alt ? `<div class="wz-alt"><button class="btn sm outline" id="wz-alt">${S.alt}</button></div>` : ''}`;
+    }
+    $('#wz', sh).innerHTML = `<div class="wz-top"><div class="dots">${dots}</div><span class="meta num">${i + 1} / ${n}</span></div>${body}
+      <div class="sheet-foot"><button class="btn outline" id="wz-back">${i ? `${IC.prev}رجوع` : 'إلغاء'}</button>
+      <button class="btn primary" id="wz-next">${S.k === 'done' ? 'حفظ القالب' : `التالي${IC.next}`}</button></div>`;
+    const W = $('#wz', sh);
+    $('#wz-back', W).onclick = () => i ? go(-1) : closeSheet();
+    $('#wz-next', W).onclick = () => {
+      if (S.k !== 'done') return go(1);
+      d.name = $('#wz-name', W).value.trim() || `${d.cols} × ${d.rows} — ${d.w}×${d.h}`;
+      if (orig){ const k = D.tpls.indexOf(orig); if (k > -1) D.tpls[k] = d; else D.tpls.push(d); } else D.tpls.push(d);
+      if (!orig) D.tplId = d.id;
+      save(); closeSheet(); toast('حُفظ القالب'); goTab('tpls');
+    };
+    if (S.k === 'paper'){
+      $$('[data-p]', W).forEach(b => b.onclick = () => { d.paper = b.dataset.p; draw(); });
+      bindSteppers(W, 1, (id, v) => { const k = id === 'wz-pw' ? 'pw' : 'ph'; d[k] = Math.max(30, Math.min(500, r2(num(v, 100)))); $('#' + id, W).value = d[k]; });
+    } else if (S.k !== 'done'){
+      const inp = $('#wz-v', W);
+      const set = v => { d[S.k] = S.int ? Math.max(S.mn, Math.min(60, Math.round(num(v, S.mn)))) : Math.max(S.mn, Math.min(500, r2(num(v, S.mn)))); inp.value = d[S.k]; $('#wz-art', W).innerHTML = art(); };
+      $$('.big-stp button', W).forEach(b => b.onclick = () => set(num(inp.value) + S.st * num(b.dataset.d)));
+      inp.oninput = () => { const v = num(inp.value, NaN); if (isFinite(v)){ d[S.k] = v; $('#wz-art', W).innerHTML = art(); } };
+      inp.onchange = () => set(inp.value);
+      if ($('#wz-alt', W)) $('#wz-alt', W).onclick = () => {
+        if (S.alt === 'ملتصقة') d[S.k] = 0;
+        else { const [pw, ph] = paperWH(d); if (S.k === 'top') d.top = Math.max(0, r2((ph - d.rows * d.h - (d.rows - 1) * d.gy) / 2)); else d.side = Math.max(0, r2((pw - d.cols * d.w - (d.cols - 1) * d.gx) / 2)); }
+        go(1);
+      };
+    }
+  }
   draw();
 }
 
