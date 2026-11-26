@@ -1,5 +1,5 @@
 // طباعة اللصيقات: تخزين التطبيق على الجهاز ليعمل بلا إنترنت
-const VERSION = 'lsq-v4';
+const VERSION = 'lsq-v5';
 const SHELL = ['./', 'index.html', 'manifest.json', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

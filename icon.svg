@@ -1,15 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
-<linearGradient id="g" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#2A7A56"/><stop offset=".5" stop-color="#1E5B43"/><stop offset="1" stop-color="#0E3527"/></linearGradient>
-<linearGradient id="au" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3CF"/><stop offset=".35" stop-color="#E8C676"/><stop offset=".6" stop-color="#B8862E"/><stop offset=".8" stop-color="#F2D58E"/><stop offset="1" stop-color="#C9A04E"/></linearGradient>
+<radialGradient id="bg" cx="0.35" cy="0.3" r="0.85"><stop offset="0" stop-color="#3A3F4B"/><stop offset=".7" stop-color="#121419"/><stop offset="1" stop-color="#0A0B0F"/></radialGradient>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
-<rect width="512" height="512" rx="112" fill="url(#g)"/>
-<g transform="translate(256 256) rotate(-12) translate(-256 -256)">
-  <rect x="96" y="146" width="320" height="220" rx="34" fill="#0E3527" opacity=".45" transform="translate(10 14)"/>
-  <rect x="96" y="146" width="320" height="220" rx="34" fill="url(#au)"/>
-  <rect x="120" y="170" width="272" height="172" rx="22" fill="none" stroke="#0F3D2C" stroke-width="5" stroke-dasharray="14 10" opacity=".55"/>
-  <rect x="160" y="214" width="192" height="22" rx="11" fill="#0F3D2C"/>
-  <rect x="190" y="258" width="132" height="14" rx="7" fill="#0F3D2C" opacity=".7"/>
-  <rect x="210" y="288" width="92" height="14" rx="7" fill="#0F3D2C" opacity=".5"/>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="4"/>
+<g transform="translate(64 64) scale(6)" fill="none" stroke="#E1144A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)">
+  <rect x="9" y="17" width="40" height="27" rx="5" transform="rotate(-10 29 30)"/><path d="M17 27h22M20 34h14" transform="rotate(-10 29 30)"/>
+  <rect x="22" y="30" width="34" height="22" rx="4" fill="#121419" transform="rotate(8 39 41)"/><path d="M29 38.5h18M32 44.5h11" transform="rotate(8 39 41)"/>
 </g>
 </svg>
